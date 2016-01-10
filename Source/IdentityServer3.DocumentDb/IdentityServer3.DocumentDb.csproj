@@ -85,6 +85,7 @@
     <Compile Include="Entities\ScopeSecret.cs" />
     <Compile Include="Entities\Token.cs" />
     <Compile Include="Entities\TokenType.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Interfaces\IClientConfigurationRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ClientConfigurationRepository.cs" />

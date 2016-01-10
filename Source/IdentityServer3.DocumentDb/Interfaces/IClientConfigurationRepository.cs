@@ -14,6 +14,6 @@ namespace IdentityServer3.DocumentDb.Interfaces
 
     public interface IScopeConfigurationRepository
     {
-        Task<Scope> GetBy
+        Task<IEnumerable<Scope>> GetByScopeNames(string[] scopeNames);
     }
 }

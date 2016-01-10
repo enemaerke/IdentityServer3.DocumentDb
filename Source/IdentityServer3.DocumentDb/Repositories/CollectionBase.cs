@@ -83,9 +83,14 @@ namespace IdentityServer3.DocumentDb.Repositories
             return GetDocument<Document>(d => d.Id == id);
         }
 
+        protected IQueryable<TDoc> GetDocumentQuery<TDoc>()
+        {
+            return _client.CreateDocumentQuery<TDoc>(_collection.DocumentsLink);
+        }
+
         protected TDoc GetDocument<TDoc>(Expression<Func<TDoc, bool>> whereClause)
         {
-            return _client.CreateDocumentQuery<TDoc>(_collection.DocumentsLink)
+            return GetDocumentQuery<TDoc>()
                 .Where(whereClause)
                 .AsEnumerable()
                 .FirstOrDefault();
@@ -93,7 +98,7 @@ namespace IdentityServer3.DocumentDb.Repositories
 
         protected async Task<TDoc> GetByExpression<TDoc>(Expression<Func<TDoc, bool>> expression)
         {
-            var query = _client.CreateDocumentQuery<TDoc>(_collection.DocumentsLink)
+            var query = GetDocumentQuery<TDoc>()
                 .Where(expression);
             var result = await QueryAsync(query);
 
