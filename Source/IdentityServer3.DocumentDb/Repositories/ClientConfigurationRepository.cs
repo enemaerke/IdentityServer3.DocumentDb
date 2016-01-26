@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,21 +15,21 @@ namespace IdentityServer3.DocumentDb.Repositories
         public const string ScopeCollectionName = "scope";
     }
 
-    public class ClientConfigurationRepository : CollectionBase, IClientConfigurationRepository
+    public class ClientConfigurationRepository : CollectionBase<Client>, IClientConfigurationRepository
     {
-        public ClientConfigurationRepository(DocumentDbConnectionSettings settings) : base(DocumentDbNames.ClientCollectionName, settings)
+        public ClientConfigurationRepository(ConnectionSettings settings) : base(DocumentDbNames.ClientCollectionName, settings)
         {
         }
 
         public async Task<Client> GetByClientId(string clientId)
         {
-            return await base.GetByExpression<Client>(x => x.ClientId == clientId);
+            return await base.GetFirstAsync(x => x.ClientId == clientId);
         }
     }
 
-    public class ScopeConfigurationRepository : CollectionBase, IScopeConfigurationRepository
+    public class ScopeConfigurationRepository : CollectionBase<Scope>, IScopeConfigurationRepository
     {
-        public ScopeConfigurationRepository(DocumentDbConnectionSettings setting):base(DocumentDbNames.ScopeCollectionName, setting) { }
+        public ScopeConfigurationRepository(ConnectionSettings setting):base(DocumentDbNames.ScopeCollectionName, setting) { }
 
         public async Task<IEnumerable<Scope>> GetByScopeNames(string[] scopeNames)
         {
@@ -36,9 +37,9 @@ namespace IdentityServer3.DocumentDb.Repositories
             string collectionName = DocumentDbNames.ScopeCollectionName;
             string namesSerialized = scopeNames.JoinToString(",", str => $"'str'");
 
-            var query = _client.CreateDocumentQuery<Scope>(_collection.SelfLink,  
+            var query = Client.CreateDocumentQuery<Scope>(Collection.DocumentsLink,  
                 $"SELECT * FROM ${collectionName} WHERE ${collectionName}.Name IN ({namesSerialized})");
-            return await base.QueryAsync<Scope>(query);
+            return await base.QueryAsync(query);
         }
     }
 }

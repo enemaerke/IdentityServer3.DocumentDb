@@ -90,7 +90,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ClientConfigurationRepository.cs" />
     <Compile Include="Repositories\CollectionBase.cs" />
-    <Compile Include="Repositories\DocumentDbConnectionSettings.cs" />
+    <Compile Include="Repositories\ConnectionSettings.cs" />
     <Compile Include="Serialization\AsyncHelper.cs" />
     <Compile Include="Serialization\ClaimConverter.cs" />
     <Compile Include="Serialization\ClaimsPrincipalConverter.cs" />

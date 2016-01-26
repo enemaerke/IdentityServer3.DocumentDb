@@ -4,18 +4,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services;
+using IdentityServer3.DocumentDb.Interfaces;
 using IdentityServer3.DocumentDb.Repositories;
 
 namespace IdentityServer3.DocumentDb.Stores
 {
-    public class ScopeStore : CollectionBase, IScopeStore
+    public class ScopeStore : IScopeStore
     {
-        public ScopeStore(DocumentDbConnectionSettings setting):base("scope", setting) { }
-
-        public Task<IEnumerable<Scope>> FindScopesAsync(IEnumerable<string> scopeNames)
+        private readonly IScopeConfigurationRepository _scopeConfigurationRepository;
+        public ScopeStore(IScopeConfigurationRepository scopeConfigurationRepository)
         {
-            var query = base.GetDocumentQuery<Scope>();
-            query.Where()
+            _scopeConfigurationRepository = scopeConfigurationRepository;
+        }
+
+        public async Task<IEnumerable<Scope>> FindScopesAsync(IEnumerable<string> scopeNames)
+        {
+            var scopeConfigs = await _scopeConfigurationRepository.GetByScopeNames(scopeNames.ToArray());
+            return scopeConfigs.Select(x => EntitiesMap.ToModel(x));
         }
 
         public Task<IEnumerable<Scope>> GetScopesAsync(bool publicOnly = true)

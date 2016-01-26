@@ -9,30 +9,26 @@ using Microsoft.Azure.Documents.Client.TransientFaultHandling;
 using Microsoft.Azure.Documents.Client.TransientFaultHandling.Strategies;
 using Microsoft.Azure.Documents.Linq;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
-using Newtonsoft.Json;
 
 namespace IdentityServer3.DocumentDb.Repositories
 {
-    public class CollectionBase
+    public class CollectionBase<T>
     {
+        private readonly string _dbId;
         private readonly string _collectionName;
-        protected IReliableReadWriteDocumentClient _client;
-        protected DocumentCollection _collection;
-        protected readonly string _dbId;
-
-        protected CollectionBase(string collectionName, DocumentDbConnectionSettings settings)
+        protected CollectionBase(string collectionName, ConnectionSettings settings)
         {
             _dbId = settings.DatabaseId;
             _collectionName = collectionName;
-            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            };
+
             CreateReliableClient(settings);
+            EnsureDatabaseAndCollectionExists().Wait(); 
         }
 
-        private void CreateReliableClient(DocumentDbConnectionSettings settings)
+        protected IReliableReadWriteDocumentClient Client { get; private set; }
+        protected DocumentCollection Collection { get; private set; }
+
+        private void CreateReliableClient(ConnectionSettings settings)
         {
             var client = new DocumentClient(new Uri(settings.EndpointUrl), settings.AuthorizationKey, new ConnectionPolicy
             {
@@ -40,36 +36,33 @@ namespace IdentityServer3.DocumentDb.Repositories
                 ConnectionProtocol = Protocol.Tcp
             });
             var documentRetryStrategy = new DocumentDbRetryStrategy(RetryStrategy.DefaultExponential) { FastFirstRetry = true };
-            _client = client.AsReliable(documentRetryStrategy);
+            Client = client.AsReliable(documentRetryStrategy);
         }
 
-        public async Task CreateDatabaseIfNotExist()
+        private async Task EnsureDatabaseAndCollectionExists()
         {
-            Database database = _client.CreateDatabaseQuery().Where(db => db.Id == _dbId).AsEnumerable().FirstOrDefault();
+            if (Collection != null)
+                return;
+
+            var client =Client;
+            Database database = client.CreateDatabaseQuery().Where(db => db.Id == _dbId).AsEnumerable().FirstOrDefault();
 
             // If the database does not exist, create a new database
             if (database == null)
             {
-                database = await _client.CreateDatabaseAsync(
+                database = await client.CreateDatabaseAsync(
                     new Database
                     {
                         Id = _dbId
                     });
             }
-        }
-
-        public async Task CreateCollectionIfNotExists()
-        {
-            if (_collection != null)
-                return;
-
-            _collection = _client.CreateDocumentCollectionQuery("dbs/" + _dbId).AsEnumerable()
+            Collection = client.CreateDocumentCollectionQuery("dbs/" + _dbId).AsEnumerable()
                 .FirstOrDefault(c => c.Id == _collectionName);
 
             // If the document collection does not exist, create a new collection
-            if (_collection == null)
+            if (Collection == null)
             {
-                _collection = await _client.CreateDocumentCollectionAsync("dbs/" + _dbId,
+                Collection = await client.CreateDocumentCollectionAsync("dbs/" + _dbId,
                     new DocumentCollection
                     {
                         Id = _collectionName
@@ -78,34 +71,21 @@ namespace IdentityServer3.DocumentDb.Repositories
             }
         }
 
-        protected Document GetDocument(string id)
+        protected IQueryable<T> GetDocumentQuery()
         {
-            return GetDocument<Document>(d => d.Id == id);
+            return Client.CreateDocumentQuery<T>(Collection.DocumentsLink);
         }
 
-        protected IQueryable<TDoc> GetDocumentQuery<TDoc>()
+        protected async Task<T> GetFirstAsync(Expression<Func<T, bool>> expression)
         {
-            return _client.CreateDocumentQuery<TDoc>(_collection.DocumentsLink);
-        }
-
-        protected TDoc GetDocument<TDoc>(Expression<Func<TDoc, bool>> whereClause)
-        {
-            return GetDocumentQuery<TDoc>()
-                .Where(whereClause)
-                .AsEnumerable()
-                .FirstOrDefault();
-        }
-
-        protected async Task<TDoc> GetByExpression<TDoc>(Expression<Func<TDoc, bool>> expression)
-        {
-            var query = GetDocumentQuery<TDoc>()
-                .Where(expression);
+            var query = GetDocumentQuery();
+            query = query.Where(expression);
             var result = await QueryAsync(query);
 
             return result.FirstOrDefault();
         }
 
-        protected async Task<IEnumerable<T>> QueryAsync<T>(IQueryable<T> query)
+        protected async Task<IEnumerable<T>> QueryAsync(IQueryable<T> query)
         {
             var docQuery = query.AsDocumentQuery();
             var batches = new List<IEnumerable<T>>();
@@ -121,16 +101,6 @@ namespace IdentityServer3.DocumentDb.Repositories
             var docs = batches.SelectMany(b => b);
 
             return docs;
-        }
-
-        protected bool Exists(string id)
-        {
-            return GetDocument(id) != null;
-        }
-
-        protected bool NotExist(string id)
-        {
-            return GetDocument(id) == null;
         }
     }
 }
