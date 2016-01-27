@@ -9,11 +9,17 @@ namespace IdentityServer3.DocumentDb.Interfaces
 {
     public interface IClientConfigurationRepository
     {
-        Task<Client> GetByClientId(string clientId);
+        Task<ClientDocument> GetByClientId(string clientId);
     }
 
     public interface IScopeConfigurationRepository
     {
-        Task<IEnumerable<Scope>> GetByScopeNames(string[] scopeNames);
+        Task<IEnumerable<ScopeDocument>> GetByScopeNames(string[] scopeNames);
+    }
+
+    public interface IConsentRepository
+    {
+        Task<IEnumerable<ConsentDocument>>  GetConsentBySubject(string subject);
+        Task<ConsentDocument>  GetConsentBySubjectAndClient(string subject, string client);
     }
 }

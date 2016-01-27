@@ -70,7 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
-    <Compile Include="Entities\Client.cs" />
+    <Compile Include="Entities\ClientDocument.cs" />
     <Compile Include="Entities\ClientClaim.cs" />
     <Compile Include="Entities\ClientCorsOrigin.cs" />
     <Compile Include="Entities\ClientCustomGrantType.cs" />
@@ -79,11 +79,11 @@
     <Compile Include="Entities\ClientRedirectUri.cs" />
     <Compile Include="Entities\ClientScope.cs" />
     <Compile Include="Entities\ClientSecret.cs" />
-    <Compile Include="Entities\Consent.cs" />
-    <Compile Include="Entities\Scope.cs" />
+    <Compile Include="Entities\ConsentDocument.cs" />
+    <Compile Include="Entities\ScopeDocument.cs" />
     <Compile Include="Entities\ScopeClaim.cs" />
     <Compile Include="Entities\ScopeSecret.cs" />
-    <Compile Include="Entities\Token.cs" />
+    <Compile Include="Entities\TokenDocument.cs" />
     <Compile Include="Entities\TokenType.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Interfaces\IClientConfigurationRepository.cs" />
@@ -91,12 +91,16 @@
     <Compile Include="Repositories\ClientConfigurationRepository.cs" />
     <Compile Include="Repositories\CollectionBase.cs" />
     <Compile Include="Repositories\ConnectionSettings.cs" />
+    <Compile Include="Repositories\ConsentRepository.cs" />
+    <Compile Include="Repositories\DocumentDbNames.cs" />
+    <Compile Include="Repositories\ScopeConfigurationRepository.cs" />
     <Compile Include="Serialization\AsyncHelper.cs" />
     <Compile Include="Serialization\ClaimConverter.cs" />
     <Compile Include="Serialization\ClaimsPrincipalConverter.cs" />
     <Compile Include="Serialization\ClientConverter.cs" />
     <Compile Include="Serialization\ScopeConverter.cs" />
     <Compile Include="Stores\ClientStore.cs" />
+    <Compile Include="Stores\ConsentStore.cs" />
     <Compile Include="Stores\EntitiesMap.cs" />
     <Compile Include="Stores\ScopeStore.cs" />
   </ItemGroup>

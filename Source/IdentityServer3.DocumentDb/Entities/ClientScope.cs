@@ -1,16 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace IdentityServer3.DocumentDb.Entities
 {
     public class ClientScope
     {
-        [Key]
-        public virtual int Id { get; set; }
+        [JsonProperty("id")]
+        public int Id { get; set; }
 
         [Required]
         [StringLength(200)]
-        public virtual string Scope { get; set; }
-
-        public virtual Client Client { get; set; }
+        public string Scope { get; set; }
     }
 }

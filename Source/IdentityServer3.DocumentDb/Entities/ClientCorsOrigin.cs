@@ -1,16 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace IdentityServer3.DocumentDb.Entities
 {
     public class ClientCorsOrigin
     {
-        [Key]
-        public virtual int Id { get; set; }
+        [JsonProperty("id")]
+        public int Id { get; set; }
 
         [Required]
         [StringLength(150)]
-        public virtual string Origin { get; set; }
-
-        public virtual Client Client { get; set; }
+        public string Origin { get; set; }
     }
 }

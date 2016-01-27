@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IdentityServer3.Core.Models;
-using IdentityServer3.DocumentDb.Entities;
 using IdentityServer3.DocumentDb.Repositories;
 using NUnit.Framework;
-using Client = IdentityServer3.DocumentDb.Entities.Client;
 
 namespace IdentityServer3.DocumentDb.Tests.Repositories
 {
@@ -28,37 +24,37 @@ namespace IdentityServer3.DocumentDb.Tests.Repositories
             Assert.IsNull(result);
         }
 
+        [Test]
         public async void CanQueryExistingClient()
         {
-            var added = await _repo.AddClient(
-            })
+            var client = ObjectMother.CreateClient();
+            var added = await _repo.AddClient(client);
+
+            var returned = await _repo.GetByClientId(client.ClientId);
+            Assert.NotNull(returned);
+
+            //TODO: assert similar to original
+
+            var deleteResult = await _repo.DeleteClientById(returned.Id);
+            Assert.True(deleteResult);
         }
     }
 
-    public class ObjectMother
+    public class ConsentRepositoryTests
     {
-        private static readonly Random s_random = new Random();
-        private static int NewInt32()
-        {
-            return s_random.Next(1);
-        }
-        public Client Create(string id = null)
-        {
-            id = id ?? Guid.NewGuid().ToString();
-            return new Client()
-            {
-                ClientId = Guid.NewGuid().ToString(),
-                Id = NewInt32(),
+        private ConsentRepository _repo;
 
-                AccessTokenType = AccessTokenType.Reference,
-                AllowedCorsOrigins = new List<ClientCorsOrigin>(),
-                AllowedCustomGrantTypes = new List<ClientCustomGrantType>(),
-                AllowedScopes = new List<ClientScope>(),
-                Claims = new List<ClientClaim>(),
-                ClientSecrets = new List<ClientSecret>(),
-                Flow = Flows.Implicit,
-                Id = ,
-                
-            };
+        public ConsentRepositoryTests()
+        {
+            _repo = new ConsentRepository(ConnectionSettingsFactory.Create());
         }
+
+        [Test]
+        public async void CanAddConsent()
+        {
+            var consent = ObjectMother.CreateConsent();
+            var result = await _repo.AddConsent(consent);
+            Assert.NotNull(result);
+        }
+    }
 }

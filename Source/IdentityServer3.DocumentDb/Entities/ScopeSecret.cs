@@ -1,25 +1,24 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace IdentityServer3.DocumentDb.Entities
 {
     public class ScopeSecret
     {
-        [Key]
-        public virtual int Id { get; set; }
+        [JsonProperty("id")]
+        public  int Id { get; set; }
 
         [StringLength(1000)]
-        public virtual string Description { get; set; }
+        public  string Description { get; set; }
 
-        public virtual DateTimeOffset? Expiration { get; set; }
+        public  DateTimeOffset? Expiration { get; set; }
 
         [StringLength(250)]
-        public virtual string Type { get; set; }
+        public  string Type { get; set; }
 
         [Required]
         [StringLength(250)]
-        public virtual string Value { get; set; }
-
-        public virtual Scope Scope { get; set; }
+        public  string Value { get; set; }
     }
 }
