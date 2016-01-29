@@ -11,15 +11,15 @@ namespace IdentityServer3.DocumentDb.Stores
 {
     public class ScopeStore : IScopeStore
     {
-        private readonly IScopeConfigurationRepository _scopeConfigurationRepository;
-        public ScopeStore(IScopeConfigurationRepository scopeConfigurationRepository)
+        private readonly IScopeRepository _scopeRepository;
+        public ScopeStore(IScopeRepository scopeRepository)
         {
-            _scopeConfigurationRepository = scopeConfigurationRepository;
+            _scopeRepository = scopeRepository;
         }
 
         public async Task<IEnumerable<Scope>> FindScopesAsync(IEnumerable<string> scopeNames)
         {
-            var scopeConfigs = await _scopeConfigurationRepository.GetByScopeNames(scopeNames.ToArray());
+            var scopeConfigs = await _scopeRepository.GetByScopeNames(scopeNames.ToArray());
             return scopeConfigs.Select(x => EntitiesMap.ToModel(x));
         }
 

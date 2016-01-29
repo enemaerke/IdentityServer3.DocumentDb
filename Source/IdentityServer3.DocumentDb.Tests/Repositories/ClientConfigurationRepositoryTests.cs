@@ -10,11 +10,11 @@ namespace IdentityServer3.DocumentDb.Tests.Repositories
     [TestFixture]
     public class ClientConfigurationRepositoryTests
     {
-        private ClientConfigurationRepository _repo;
+        private ClientRepository _repo;
 
         public ClientConfigurationRepositoryTests()
         {
-            _repo = new ClientConfigurationRepository(ConnectionSettingsFactory.Create());
+            _repo = new ClientRepository(ConnectionSettingsFactory.Create());
         }
 
         [Test]

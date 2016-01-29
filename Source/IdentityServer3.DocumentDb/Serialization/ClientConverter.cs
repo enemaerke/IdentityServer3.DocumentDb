@@ -1,6 +1,7 @@
 ﻿using System;
 using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services;
+using IdentityServer3.DocumentDb.Interfaces;
 using Newtonsoft.Json;
 
 namespace IdentityServer3.DocumentDb.Serialization
@@ -12,11 +13,11 @@ namespace IdentityServer3.DocumentDb.Serialization
 
     public class ClientConverter : JsonConverter
     {
-        private readonly IClientStore _clientStore;
+        private readonly IClientRepository _clientStore;
 
-        public ClientConverter(IClientStore clientStore)
+        public ClientConverter(IClientRepository clientStore)
         {
-            if (clientStore == null) throw new ArgumentNullException("clientStore");
+            if (clientStore == null) throw new ArgumentNullException(nameof(clientStore));
 
             _clientStore = clientStore;
         }
@@ -29,7 +30,7 @@ namespace IdentityServer3.DocumentDb.Serialization
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var source = serializer.Deserialize<ClientLite>(reader);
-            return AsyncHelper.RunSync(async () => await _clientStore.FindClientByIdAsync(source.ClientId));
+            return AsyncHelper.RunSync(async () => await _clientStore.GetByClientId(source.ClientId));
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

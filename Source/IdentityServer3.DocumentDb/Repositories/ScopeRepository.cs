@@ -6,9 +6,9 @@ using IdentityServer3.DocumentDb.Interfaces;
 
 namespace IdentityServer3.DocumentDb.Repositories
 {
-    public class ScopeConfigurationRepository : CollectionBase, IScopeConfigurationRepository
+    public class ScopeRepository : CollectionBase, IScopeRepository
     {
-        public ScopeConfigurationRepository(ConnectionSettings setting):base(DocumentDbNames.ScopeCollectionName, setting) { }
+        public ScopeRepository(ConnectionSettings setting):base(DocumentDbNames.ScopeCollectionName, setting) { }
 
         public async Task<IEnumerable<ScopeDocument>> GetByScopeNames(string[] scopeNames)
         {

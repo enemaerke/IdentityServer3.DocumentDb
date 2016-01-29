@@ -8,9 +8,9 @@ using IdentityServer3.DocumentDb.Interfaces;
 
 namespace IdentityServer3.DocumentDb.Repositories
 {
-    public class ClientConfigurationRepository : CollectionBase, IClientConfigurationRepository
+    public class ClientRepository : CollectionBase, IClientRepository
     {
-        public ClientConfigurationRepository(ConnectionSettings settings) : base(DocumentDbNames.ClientCollectionName, settings)
+        public ClientRepository(ConnectionSettings settings) : base(DocumentDbNames.ClientCollectionName, settings)
         {
         }
 

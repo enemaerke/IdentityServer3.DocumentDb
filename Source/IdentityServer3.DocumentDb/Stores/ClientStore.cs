@@ -8,9 +8,9 @@ namespace IdentityServer3.DocumentDb.Stores
 {
     public class ClientStore : IClientStore
     {
-        private readonly IClientConfigurationRepository _repo;
+        private readonly IClientRepository _repo;
 
-        public ClientStore(IClientConfigurationRepository repo)
+        public ClientStore(IClientRepository repo)
         {
             _repo = repo;
         }

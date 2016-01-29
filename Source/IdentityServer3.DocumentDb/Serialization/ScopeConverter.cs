@@ -2,6 +2,7 @@
 using System.Linq;
 using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services;
+using IdentityServer3.DocumentDb.Interfaces;
 using Newtonsoft.Json;
 
 namespace IdentityServer3.DocumentDb.Serialization
@@ -13,11 +14,11 @@ namespace IdentityServer3.DocumentDb.Serialization
 
     public class ScopeConverter : JsonConverter
     {
-        private readonly IScopeStore scopeStore;
+        private readonly IScopeRepository scopeStore;
 
-        public ScopeConverter(IScopeStore scopeStore)
+        public ScopeConverter(IScopeRepository scopeStore)
         {
-            if (scopeStore == null) throw new ArgumentNullException("scopeStore");
+            if (scopeStore == null) throw new ArgumentNullException(nameof(scopeStore));
 
             this.scopeStore = scopeStore;
         }
@@ -30,7 +31,7 @@ namespace IdentityServer3.DocumentDb.Serialization
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var source = serializer.Deserialize<ScopeLite>(reader);
-            var scopes = AsyncHelper.RunSync(async ()=>await scopeStore.FindScopesAsync(new string[]{source.Name}));
+            var scopes = AsyncHelper.RunSync(async ()=>await scopeStore.GetByScopeNames(new string[]{source.Name}));
             return scopes.Single();
         }
 
