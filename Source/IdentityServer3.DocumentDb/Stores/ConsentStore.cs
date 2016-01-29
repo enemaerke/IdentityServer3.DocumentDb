@@ -34,9 +34,10 @@ namespace IdentityServer3.DocumentDb.Stores
             return consentDoc.ToModel();
         }
 
-        public Task UpdateAsync(Consent consent)
+        public async Task UpdateAsync(Consent consent)
         {
-            throw new System.NotImplementedException();
+            var document = consent.ToModel();
+            return await _repository.Update(document);
         }
     }
 }

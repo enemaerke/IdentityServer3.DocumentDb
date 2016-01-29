@@ -98,6 +98,7 @@
     <Compile Include="Repositories\ConsentRepository.cs" />
     <Compile Include="Repositories\DocumentDbNames.cs" />
     <Compile Include="Repositories\ScopeRepository.cs" />
+    <Compile Include="Repositories\TokenRepository.cs" />
     <Compile Include="Serialization\AsyncHelper.cs" />
     <Compile Include="Serialization\ClaimConverter.cs" />
     <Compile Include="Serialization\ClaimsPrincipalConverter.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Stores\ScopeStore.cs" />
     <Compile Include="Stores\TokenHandleStore.cs" />
     <Compile Include="Stores\AbstractTokenStore.cs" />
+    <Compile Include="Util\RelectionUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

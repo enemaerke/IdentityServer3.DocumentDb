@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using IdentityServer3.DocumentDb.Repositories;
 using Newtonsoft.Json;
 
 namespace IdentityServer3.DocumentDb.Entities
@@ -21,6 +22,7 @@ namespace IdentityServer3.DocumentDb.Entities
         public DateTimeOffset Expiry { get; set; }
     }
 
+    [CollectionName(DocumentDbNames.TokenHandleCollectionName)]
     public class TokenHandleDocument : TokenDocument
     {
         public string Audience { get; set; }
@@ -32,6 +34,7 @@ namespace IdentityServer3.DocumentDb.Entities
         public int Version { get; set; }
     }
 
+    [CollectionName(DocumentDbNames.RefreshTokenCollectionName)]
     public class RefreshTokenDocument : TokenDocument
     {
         public string AccessTokenJson { get; set; }
@@ -41,6 +44,7 @@ namespace IdentityServer3.DocumentDb.Entities
         public string SubjectJson { get; set; }
     }
 
+    [CollectionName(DocumentDbNames.AuthorizationTokenCollectionName)]
     public class AuthorizationCodeTokenDocument : TokenDocument
     {
         public DateTimeOffset CreationTime { get; set; }
@@ -51,5 +55,16 @@ namespace IdentityServer3.DocumentDb.Entities
         public bool WasConsentShown { get; set; }
         public string SubjectJson { get; set; }
         public string RequestScopesJson { get; set; }
+    }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+    public class CollectionNameAttribute : Attribute
+    {
+        public string Name { get; set; }
+
+        public CollectionNameAttribute(string name)
+        {
+            Name = name;
+        }
     }
 }
