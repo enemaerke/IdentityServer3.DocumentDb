@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace IdentityServer3.DocumentDb.Repositories
+﻿namespace IdentityServer3.DocumentDb.Repositories.Impl
 {
     public class DocumentDbNames
     {

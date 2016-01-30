@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IdentityServer3.DocumentDb.Repositories;
+using IdentityServer3.DocumentDb.Repositories.Impl;
 using NUnit.Framework;
 
 namespace IdentityServer3.DocumentDb.Tests.Repositories

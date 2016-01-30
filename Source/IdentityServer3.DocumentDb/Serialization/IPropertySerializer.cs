@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace IdentityServer3.DocumentDb.Interfaces
+namespace IdentityServer3.DocumentDb.Serialization
 {
     public interface IPropertySerializer
     {

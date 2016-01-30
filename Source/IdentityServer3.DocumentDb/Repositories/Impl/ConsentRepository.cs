@@ -2,9 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer3.DocumentDb.Entities;
-using IdentityServer3.DocumentDb.Interfaces;
 
-namespace IdentityServer3.DocumentDb.Repositories
+namespace IdentityServer3.DocumentDb.Repositories.Impl
 {
     public class ConsentRepository : CollectionBase, IConsentRepository
     {
@@ -26,6 +25,11 @@ namespace IdentityServer3.DocumentDb.Repositories
         {
             var result = await base.QueryAsync<ConsentDocument>(x => x.Subject == subject && x.ClientId == client);
             return result.FirstOrDefault();
+        }
+
+        public async Task Upsert(ConsentDocument document)
+        {
+            await base.Upsert(document);
         }
     }
 }

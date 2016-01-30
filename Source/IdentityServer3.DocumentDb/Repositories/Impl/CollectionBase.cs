@@ -11,7 +11,7 @@ using Microsoft.Azure.Documents.Linq;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Newtonsoft.Json;
 
-namespace IdentityServer3.DocumentDb.Repositories
+namespace IdentityServer3.DocumentDb.Repositories.Impl
 {
     public class CollectionBase 
     {

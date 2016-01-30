@@ -2,7 +2,7 @@
 using System.Linq;
 using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services;
-using IdentityServer3.DocumentDb.Interfaces;
+using IdentityServer3.DocumentDb.Repositories;
 using Newtonsoft.Json;
 
 namespace IdentityServer3.DocumentDb.Serialization
@@ -31,8 +31,8 @@ namespace IdentityServer3.DocumentDb.Serialization
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var source = serializer.Deserialize<ScopeLite>(reader);
-            var scopes = AsyncHelper.RunSync(async ()=>await scopeStore.GetByScopeNames(new string[]{source.Name}));
-            return scopes.Single();
+            var result = scopeStore.GetByScopeNames(new string[]{source.Name}).Result;
+            return result.Single();
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

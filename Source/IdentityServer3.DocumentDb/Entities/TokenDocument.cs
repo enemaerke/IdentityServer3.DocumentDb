@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using IdentityServer3.DocumentDb.Repositories;
+using IdentityServer3.DocumentDb.Repositories.Impl;
 using Newtonsoft.Json;
 
 namespace IdentityServer3.DocumentDb.Entities

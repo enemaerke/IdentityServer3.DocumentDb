@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using IdentityServer3.DocumentDb.Entities;
 
-namespace IdentityServer3.DocumentDb.Interfaces
+namespace IdentityServer3.DocumentDb.Repositories
 {
     public interface ITokenRepository<TInternal>
         where TInternal : TokenDocument

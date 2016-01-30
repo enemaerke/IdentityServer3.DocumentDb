@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services;
-using IdentityServer3.DocumentDb.Interfaces;
 using IdentityServer3.DocumentDb.Repositories;
 
 namespace IdentityServer3.DocumentDb.Stores

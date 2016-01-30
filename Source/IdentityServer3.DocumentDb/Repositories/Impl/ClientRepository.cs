@@ -1,12 +1,7 @@
-﻿using System.Collections;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using IdentityServer3.DocumentDb.Entities;
-using IdentityServer3.DocumentDb.Interfaces;
 
-namespace IdentityServer3.DocumentDb.Repositories
+namespace IdentityServer3.DocumentDb.Repositories.Impl
 {
     public class ClientRepository : CollectionBase, IClientRepository
     {

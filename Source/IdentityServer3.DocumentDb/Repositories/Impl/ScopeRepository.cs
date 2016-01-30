@@ -1,10 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer3.DocumentDb.Entities;
-using IdentityServer3.DocumentDb.Extensions;
-using IdentityServer3.DocumentDb.Interfaces;
 
-namespace IdentityServer3.DocumentDb.Repositories
+namespace IdentityServer3.DocumentDb.Repositories.Impl
 {
     public class ScopeRepository : CollectionBase, IScopeRepository
     {
@@ -14,7 +13,7 @@ namespace IdentityServer3.DocumentDb.Repositories
         {
             //TODO: sql injection sanitized somehow?
             string collectionName = DocumentDbNames.ScopeCollectionName;
-            string namesSerialized = scopeNames.JoinToString(",", str => $"'str'");
+            string namesSerialized = string.Join(", ", scopeNames.Select(s => $"'{s}'"));
 
             var query = base._client.CreateDocumentQuery<ScopeDocument>(_collection.DocumentsLink,  
                 $"SELECT * FROM ${collectionName} WHERE ${collectionName}.Name IN ({namesSerialized})");

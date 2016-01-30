@@ -1,4 +1,4 @@
-namespace IdentityServer3.DocumentDb.Repositories
+namespace IdentityServer3.DocumentDb.Repositories.Impl
 {
     public class ConnectionSettings
     {

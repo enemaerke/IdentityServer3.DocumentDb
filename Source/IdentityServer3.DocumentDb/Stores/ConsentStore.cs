@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services;
 using IdentityServer3.DocumentDb.Entities;
-using IdentityServer3.DocumentDb.Interfaces;
+using IdentityServer3.DocumentDb.Repositories;
 
 namespace IdentityServer3.DocumentDb.Stores
 {
@@ -37,7 +37,7 @@ namespace IdentityServer3.DocumentDb.Stores
         public async Task UpdateAsync(Consent consent)
         {
             var document = consent.ToModel();
-            return await _repository.Update(document);
+            await _repository.Upsert(document);
         }
     }
 }

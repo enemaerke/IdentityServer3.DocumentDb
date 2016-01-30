@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using IdentityServer3.DocumentDb.Interfaces;
+using IdentityServer3.DocumentDb.Repositories;
 using Newtonsoft.Json;
 
 namespace IdentityServer3.DocumentDb.Serialization
