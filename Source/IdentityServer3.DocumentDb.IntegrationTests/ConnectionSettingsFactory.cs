@@ -1,9 +1,8 @@
 ﻿using System;
-using IdentityServer3.DocumentDb.Repositories;
 using IdentityServer3.DocumentDb.Repositories.Impl;
 using Microsoft.Win32;
 
-namespace IdentityServer3.DocumentDb.Tests
+namespace IdentityServer3.DocumentDb.IntegrationTests
 {
     /// <summary>
     /// Test helper that facilitates connection settings for testing

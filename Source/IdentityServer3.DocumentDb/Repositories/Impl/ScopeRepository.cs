@@ -15,9 +15,15 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
             string collectionName = DocumentDbNames.ScopeCollectionName;
             string namesSerialized = string.Join(", ", scopeNames.Select(s => $"'{s}'"));
 
+            string sql = $"SELECT * FROM {collectionName} WHERE {collectionName}.Name IN ({namesSerialized})";
             var query = base._client.CreateDocumentQuery<ScopeDocument>(_collection.DocumentsLink,  
-                $"SELECT * FROM ${collectionName} WHERE ${collectionName}.Name IN ({namesSerialized})");
+                sql);
             return await base.QueryAsync(query);
+        }
+
+        public async Task AddScope(ScopeDocument scope)
+        {
+            await base.Upsert(scope);
         }
     }
 }

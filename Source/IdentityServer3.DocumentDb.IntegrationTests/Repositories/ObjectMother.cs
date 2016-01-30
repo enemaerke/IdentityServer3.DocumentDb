@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using IdentityServer3.Core.Models;
 using IdentityServer3.DocumentDb.Entities;
+using ScopeClaim = IdentityServer3.DocumentDb.Entities.ScopeClaim;
 
-namespace IdentityServer3.DocumentDb.Tests.Repositories
+namespace IdentityServer3.DocumentDb.IntegrationTests.Repositories
 {
 
     public class ObjectMother
@@ -12,7 +13,7 @@ namespace IdentityServer3.DocumentDb.Tests.Repositories
 
         private static int NewInt32()
         {
-            return s_random.Next();
+            return s_random.Next(0, int.MaxValue);
         }
 
         public static ClientDocument CreateClient(string id = null)
@@ -136,6 +137,46 @@ namespace IdentityServer3.DocumentDb.Tests.Repositories
                 ClientId = "clientid",
                 Subject = "subject",
                 Scopes = "myscopes"
+            };
+        }
+
+        public static ScopeDocument CreateScope(string scopeName)
+        {
+            return new ScopeDocument()
+            {
+                AllowUnrestrictedIntrospection = true,
+                ClaimsRule = "claimsrule",
+                Id = NewInt32().ToString(),
+                Type = 1,
+                Description = "some description",
+                Enabled = true,
+                DisplayName = "some displayname",
+                Emphasize = true,
+                IncludeAllClaimsForUser = true,
+                Name = scopeName ?? "testscopename",
+                Required = true,
+                ScopeClaims = new List<ScopeClaim>()
+                {
+                    new ScopeClaim()
+                    {
+                        AlwaysIncludeInIdToken = true,
+                        Description = "some scope claim",
+                        Name = "scopeclaim name",
+                        Id = NewInt32(),
+                    }
+                },
+                ScopeSecrets = new List<ScopeSecret>()
+                {
+                    new ScopeSecret()
+                    {
+                        Description = "some description",
+                        Expiration = DateTimeOffset.Now,
+                        Id = NewInt32(),
+                        Type = "some type",
+                        Value = "my value",
+                    }
+                },
+                ShowInDiscoveryDocument = true,
             };
         }
     }

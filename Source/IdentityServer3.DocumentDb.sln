@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer3.DocumentDb", "IdentityServer3.DocumentDb\IdentityServer3.DocumentDb.csproj", "{53A35221-F187-4D2C-9FF3-AF7CFC6639ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer3.DocumentDb.Tests", "IdentityServer3.DocumentDb.Tests\IdentityServer3.DocumentDb.Tests.csproj", "{A7EF52FC-A994-40E1-82A1-7D7E7EF77DD6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer3.DocumentDb.IntegrationTests", "IdentityServer3.DocumentDb.IntegrationTests\IdentityServer3.DocumentDb.IntegrationTests.csproj", "{A7EF52FC-A994-40E1-82A1-7D7E7EF77DD6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

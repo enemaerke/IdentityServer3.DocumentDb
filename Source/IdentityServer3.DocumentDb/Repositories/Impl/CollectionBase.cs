@@ -44,7 +44,7 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
             _client = client.AsReliable(documentRetryStrategy);
         }
 
-        public async Task CreateDatabaseIfNotExist()
+        private async Task CreateDatabaseIfNotExist()
         {
             Database database = _client.CreateDatabaseQuery()
                 .Where(db => db.Id == _dbId)
@@ -62,7 +62,7 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
             }
         }
 
-        public async Task CreateCollectionIfNotExists()
+        private async Task CreateCollectionIfNotExists()
         {
             if (_collection != null)
                 return;
