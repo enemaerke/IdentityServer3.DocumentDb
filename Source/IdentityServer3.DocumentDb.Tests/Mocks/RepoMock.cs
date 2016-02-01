@@ -19,6 +19,11 @@ namespace IdentityServer3.DocumentDb.Tests.Mocks
         {
             return Task.FromResult(List.Where(x => scopeNames.Contains(x.Name)));
         }
+
+        public Task<IEnumerable<ScopeDocument>> GetAllScopes()
+        {
+            return Task.FromResult(List.AsEnumerable());
+        }
     }
 
     public class MockClientRepository : RepoMock<ClientDocument>, IClientRepository

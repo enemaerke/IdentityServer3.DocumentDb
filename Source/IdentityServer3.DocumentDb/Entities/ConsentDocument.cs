@@ -16,7 +16,6 @@ namespace IdentityServer3.DocumentDb.Entities
         public string ClientId { get; set; }
 
         [Required]
-        [StringLength(2000)]
-        public string Scopes { get; set; }
+        public string[] Scopes { get; set; }
     }
 }

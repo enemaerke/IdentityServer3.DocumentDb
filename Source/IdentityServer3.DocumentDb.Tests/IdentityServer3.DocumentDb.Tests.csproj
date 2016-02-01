@@ -71,6 +71,7 @@
     <Compile Include="Serialization\ClaimsSerializationTests.cs" />
     <Compile Include="Serialization\ClientSerializationTests.cs" />
     <Compile Include="Serialization\ScopeSerializationTests.cs" />
+    <Compile Include="Stores\EntitiesMappingTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -12,7 +12,7 @@ namespace IdentityServer3.DocumentDb.Tests.Serialization
         [Test]
         public async Task CanSerializeAndDeserializeAClient()
         {
-            var client = ObjectMother.CreateClient("123");
+            var client = ObjectMother.CreateClientDocument("123");
 
             var clientRepo = new MockClientRepository();
             clientRepo.List.Add(client);

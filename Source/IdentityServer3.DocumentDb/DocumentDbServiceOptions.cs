@@ -13,7 +13,7 @@ namespace IdentityServer3.DocumentDb
             return new ConnectionSettings()
             {
                 DatabaseId = DatabaseId,
-                EndpointUrl = EndpointUri,
+                EndpointUri = EndpointUri,
                 AuthorizationKey = AuthorizationKey,
             };
         }

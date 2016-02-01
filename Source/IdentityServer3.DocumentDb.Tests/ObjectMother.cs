@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using IdentityServer3.Core.Models;
 using IdentityServer3.DocumentDb.Entities;
-using ScopeClaim = IdentityServer3.DocumentDb.Entities.ScopeClaim;
+using IdentityServer3.DocumentDb.Stores;
 
 namespace IdentityServer3.DocumentDb.Tests
 {
@@ -16,67 +17,43 @@ namespace IdentityServer3.DocumentDb.Tests
             return s_random.Next(0, int.MaxValue);
         }
 
-        public static ClientDocument CreateClient(string id = null)
+        public static Client CreateClient(string clientId = null)
         {
-            id = id ?? Guid.NewGuid().ToString();
-            return new ClientDocument()
+            clientId = clientId ?? NewInt32().ToString();
+            return new Client()
             {
-                ClientId = id,
-                Id = NewInt32().ToString(),
+                ClientId = clientId,
+
+                AllowAccessToAllCustomGrantTypes = true,
 
                 AbsoluteRefreshTokenLifetime = 1,
                 AccessTokenType = AccessTokenType.Reference,
                 AccessTokenLifetime = 1,
-                AllowAccessToAllGrantTypes = true,
                 AllowAccessToAllScopes = true,
                 AllowClientCredentialsOnly = true,
-                AllowedCorsOrigins = new List<ClientCorsOrigin>()
+                AllowedCorsOrigins = new List<string>()
                 {
-                    new ClientCorsOrigin()
-                    {
-                        Id = 1,
-                        Origin = "origin",
-                    },
+                    "corsorigin",
                 },
-                AllowedCustomGrantTypes = new List<ClientCustomGrantType>()
+                AllowedCustomGrantTypes = new List<string>()
                 {
-                    new ClientCustomGrantType()
-                    {
-                        GrantType = "granttype",
-                        Id = 1,
-                    }
+                    "customergranttype",
                 },
                 AllowRememberConsent = true,
-                AllowedScopes = new List<ClientScope>()
+                AllowedScopes = new List<string>()
                 {
-                    new ClientScope()
-                    {
-                        Id = 1,
-                        Scope = "clientscope",
-                    }
+                    "clientscope",
                 },
                 AlwaysSendClientClaims = true,
                 AuthorizationCodeLifetime = 1,
 
-                Claims = new List<ClientClaim>()
+                Claims = new List<Claim>()
                 {
-                    new ClientClaim()
-                    {
-                        Id = 1,
-                        Type = "email",
-                        Value = "some email",
-                    }
+                    new Claim("claimtype", "claimvalue", "valuetype", "issuer", "originalissuer"),
                 },
-                ClientSecrets = new List<ClientSecret>()
+                ClientSecrets = new List<Secret>()
                 {
-                    new ClientSecret()
-                    {
-                        Id = 1,
-                        Description = "some description",
-                        Expiration = DateTimeOffset.Now,
-                        Type = "type",
-                        Value = "value",
-                    }
+                    new Secret("secrectvalue", "secretdescription", DateTimeOffset.Now),
                 },
                 ClientName = "client name",
                 ClientUri = "client uri",
@@ -86,13 +63,9 @@ namespace IdentityServer3.DocumentDb.Tests
 
                 Flow = Flows.Implicit,
 
-                IdentityProviderRestrictions = new List<ClientIdPRestriction>()
+                IdentityProviderRestrictions = new List<string>()
                 {
-                    new ClientIdPRestriction()
-                    {
-                        Id = 1,
-                        Provider = "provider",
-                    }
+                    "identityprovider",
                 },
                 IdentityTokenLifetime = 1,
                 IncludeJwtId = true,
@@ -101,23 +74,15 @@ namespace IdentityServer3.DocumentDb.Tests
                 LogoutSessionRequired = true,
                 LogoutUri = "logout-uri",
 
-                PostLogoutRedirectUris = new List<ClientPostLogoutRedirectUri>()
+                PostLogoutRedirectUris = new List<string>()
                 {
-                    new ClientPostLogoutRedirectUri()
-                    {
-                        Id = 1,
-                        Uri = "some logout redirect uri"
-                    }
+                    "post-logout-redirect-uri",
                 },
                 PrefixClientClaims = true,
 
-                RedirectUris = new List<ClientRedirectUri>()
+                RedirectUris = new List<string>()
                 {
-                    new ClientRedirectUri()
-                    {
-                        Id = 1,
-                        Uri = "redirect uri"
-                    }
+                    "redirect-uri",
                 },
                 RefreshTokenExpiration = TokenExpiration.Absolute,
                 RefreshTokenUsage = TokenUsage.ReUse,
@@ -125,29 +90,41 @@ namespace IdentityServer3.DocumentDb.Tests
 
                 SlidingRefreshTokenLifetime = 1,
 
-                UpdateAccessTokenOnRefresh = true,
-
+                UpdateAccessTokenClaimsOnRefresh = true,
             };
         }
 
-        public static ConsentDocument CreateConsent()
+        public static ClientDocument CreateClientDocument(string id = null)
         {
-            return new ConsentDocument()
+            //relies on the entity mapping working (there are tests for that)
+            return CreateClient(id).ToDocument();
+        }
+
+        public static Consent CreateConsent(string clientId = null)
+        {
+            return new Consent()
             {
-                ClientId = "clientid",
-                Subject = "subject",
-                Scopes = "myscopes"
+                ClientId = clientId ?? NewInt32().ToString(),
+                Scopes = new List<string>()
+                {
+                    "scope1"
+                },
+                Subject = "subjectid",
             };
         }
 
-        public static ScopeDocument CreateScope(string scopeName)
+        public static ConsentDocument CreateConsentDocument(string clientId = null)
         {
-            return new ScopeDocument()
+            return CreateConsent(clientId).ToDocument();
+        }
+
+        public static Scope CreateScope(string scopeName = null)
+        {
+            return new Scope()
             {
                 AllowUnrestrictedIntrospection = true,
                 ClaimsRule = "claimsrule",
-                Id = NewInt32().ToString(),
-                Type = 1,
+                Type = ScopeType.Identity,
                 Description = "some description",
                 Enabled = true,
                 DisplayName = "some displayname",
@@ -155,29 +132,26 @@ namespace IdentityServer3.DocumentDb.Tests
                 IncludeAllClaimsForUser = true,
                 Name = scopeName ?? "testscopename",
                 Required = true,
-                ScopeClaims = new List<ScopeClaim>()
+                Claims = new List<Core.Models.ScopeClaim>()
                 {
-                    new ScopeClaim()
+                    new Core.Models.ScopeClaim()
                     {
                         AlwaysIncludeInIdToken = true,
-                        Description = "some scope claim",
-                        Name = "scopeclaim name",
-                        Id = NewInt32(),
+                        Description = "some description",
+                        Name = "scopeclaimname"
                     }
                 },
-                ScopeSecrets = new List<ScopeSecret>()
+                ScopeSecrets = new List<Secret>()
                 {
-                    new ScopeSecret()
-                    {
-                        Description = "some description",
-                        Expiration = DateTimeOffset.Now,
-                        Id = NewInt32(),
-                        Type = "some type",
-                        Value = "my value",
-                    }
+                    new Secret("secretvalue", "description", DateTimeOffset.Now),
                 },
                 ShowInDiscoveryDocument = true,
             };
+        }
+
+        public static ScopeDocument CreateScopeDocument(string scopeName = null)
+        {
+            return CreateScope(scopeName).ToDocument();
         }
     }
 }

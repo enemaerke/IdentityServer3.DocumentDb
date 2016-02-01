@@ -7,11 +7,6 @@ using Newtonsoft.Json;
 
 namespace IdentityServer3.DocumentDb.Serialization
 {
-    public class ScopeLite
-    {
-        public string Name { get; set; }
-    }
-
     public class ScopeConverter : JsonConverter
     {
         private readonly IScopeRepository _scopeRepo;
@@ -30,20 +25,15 @@ namespace IdentityServer3.DocumentDb.Serialization
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var source = serializer.Deserialize<ScopeLite>(reader);
-            var result = _scopeRepo.GetByScopeNames(new string[]{source.Name}).Result;
+            var name = serializer.Deserialize<string>(reader);
+            var result = _scopeRepo.GetByScopeNames(new string[]{name}).Result;
             return result.Single();
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var source = (Scope)value;
-
-            var target = new ScopeLite
-            {
-                Name = source.Name
-            };
-            serializer.Serialize(writer, target);
+            serializer.Serialize(writer, source.Name);
         }
     }
 }

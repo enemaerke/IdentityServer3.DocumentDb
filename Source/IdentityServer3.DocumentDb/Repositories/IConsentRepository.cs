@@ -8,6 +8,6 @@ namespace IdentityServer3.DocumentDb.Repositories
     {
         Task<IEnumerable<ConsentDocument>>  GetConsentBySubject(string subject);
         Task<ConsentDocument>  GetConsentBySubjectAndClient(string subject, string client);
-        Task Upsert(ConsentDocument document);
+        Task UpsertConsent(ConsentDocument document);
     }
 }

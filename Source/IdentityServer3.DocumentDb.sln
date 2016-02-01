@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer3.DocumentDb.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer3.DocumentDb.Tests", "IdentityServer3.DocumentDb.Tests\IdentityServer3.DocumentDb.Tests.csproj", "{FC766F13-1961-4A48-AFB0-A4CA08833660}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebHost", "WebHost\WebHost.csproj", "{8413C37B-06ED-4E64-B389-FD3F53FC40A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{FC766F13-1961-4A48-AFB0-A4CA08833660}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC766F13-1961-4A48-AFB0-A4CA08833660}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC766F13-1961-4A48-AFB0-A4CA08833660}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8413C37B-06ED-4E64-B389-FD3F53FC40A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8413C37B-06ED-4E64-B389-FD3F53FC40A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8413C37B-06ED-4E64-B389-FD3F53FC40A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8413C37B-06ED-4E64-B389-FD3F53FC40A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

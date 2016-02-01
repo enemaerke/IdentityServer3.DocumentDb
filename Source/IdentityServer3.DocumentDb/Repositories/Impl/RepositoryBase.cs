@@ -35,7 +35,7 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
 
         private void CreateReliableClient(ConnectionSettings settings)
         {
-            var client = new DocumentClient(new Uri(settings.EndpointUrl), settings.AuthorizationKey, new ConnectionPolicy
+            var client = new DocumentClient(new Uri(settings.EndpointUri), settings.AuthorizationKey, new ConnectionPolicy
             {
                 ConnectionMode = ConnectionMode.Direct,
                 ConnectionProtocol = Protocol.Tcp

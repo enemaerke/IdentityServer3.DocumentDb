@@ -31,10 +31,6 @@ namespace IdentityServer3.DocumentDb.Services
 
     internal static class StringExtensions
     {
-        public static string GetOrigin(this ClientCorsOrigin clientCorsOrigin)
-        {
-            return GetOrigin(clientCorsOrigin.Origin);
-        }
         public static string GetOrigin(this string url)
         {
             if (url != null && (url.StartsWith("http://") || url.StartsWith("https://")))

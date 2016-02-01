@@ -12,8 +12,8 @@ namespace IdentityServer3.DocumentDb.Tests.Serialization
         [Test]
         public async Task CanSerializeAndDeserializeAScope()
         {
-            var s1 = ObjectMother.CreateScope("email");
-            var s2 = ObjectMother.CreateScope("read");
+            var s1 = ObjectMother.CreateScopeDocument("email");
+            var s2 = ObjectMother.CreateScopeDocument("read");
 
             var scopeRepo = new MockScopeRepository();
             scopeRepo.List.Add(s1);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Claims;
+using IdentityServer3.DocumentDb.Entities;
 using Newtonsoft.Json;
 
 namespace IdentityServer3.DocumentDb.Serialization
@@ -14,18 +15,14 @@ namespace IdentityServer3.DocumentDb.Serialization
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var source = serializer.Deserialize<ClaimLite>(reader);
-            var target = new Claim(source.Type, source.Value);
-            return target;
+            return source.ToClaim();
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             Claim source = (Claim)value;
 
-            var target = new ClaimLite {
-                Type = source.Type,
-                Value = source.Value 
-            };
+            var target = new ClaimLite(source);
             serializer.Serialize(writer, target);
         }
     }

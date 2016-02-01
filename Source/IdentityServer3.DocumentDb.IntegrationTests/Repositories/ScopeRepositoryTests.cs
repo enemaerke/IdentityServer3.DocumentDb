@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer3.DocumentDb.Repositories.Impl;
+using IdentityServer3.DocumentDb.Tests;
 using NUnit.Framework;
 
 namespace IdentityServer3.DocumentDb.IntegrationTests.Repositories
@@ -27,7 +28,7 @@ namespace IdentityServer3.DocumentDb.IntegrationTests.Repositories
         [Test]
         public async Task CanQueryExistingScopes()
         {
-            await _repo.AddScope(ObjectMother.CreateScope("myscope"));
+            await _repo.AddScope(ObjectMother.CreateScopeDocument("myscope"));
 
             var result = await _repo.GetByScopeNames(new[] {"myscope", "shouldnotbefound"});
             Assert.NotNull(result);

@@ -2,22 +2,11 @@
 using System.Linq;
 using System.Security.Claims;
 using IdentityServer3.Core;
+using IdentityServer3.DocumentDb.Entities;
 using Newtonsoft.Json;
 
 namespace IdentityServer3.DocumentDb.Serialization
 {
-    public class ClaimsPrincipalLite
-    {
-        public string AuthenticationType { get; set; }
-        public ClaimLite[] Claims { get; set; }
-    }
-
-    public class ClaimLite
-    {
-        public string Type { get; set; }
-        public string Value { get; set; }
-    }
-
     public class ClaimsPrincipalConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
@@ -43,7 +32,7 @@ namespace IdentityServer3.DocumentDb.Serialization
             var target = new ClaimsPrincipalLite
             {
                 AuthenticationType = source.Identity.AuthenticationType,
-                Claims = source.Claims.Select(x => new ClaimLite { Type = x.Type, Value = x.Value }).ToArray()
+                Claims = source.Claims.Select(x => new ClaimLite(x)).ToArray()
             };
             serializer.Serialize(writer, target);
         }

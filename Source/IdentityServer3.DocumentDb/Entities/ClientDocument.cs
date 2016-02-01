@@ -32,14 +32,14 @@ namespace IdentityServer3.DocumentDb.Entities
         public Flows Flow { get; set; }
         public bool AllowClientCredentialsOnly { get; set; }
 
-        public ICollection<ClientRedirectUri> RedirectUris { get; set; }
-        public ICollection<ClientPostLogoutRedirectUri> PostLogoutRedirectUris { get; set; }
+        public ICollection<string> RedirectUris { get; set; }
+        public ICollection<string> PostLogoutRedirectUris { get; set; }
 
         public string LogoutUri { get; set; }
         public bool LogoutSessionRequired { get; set; }
 
         public bool AllowAccessToAllScopes { get; set; }
-        public ICollection<ClientScope> AllowedScopes { get; set; }
+        public ICollection<string> AllowedScopes { get; set; }
 
         // in seconds
         [Range(0, Int32.MaxValue)]
@@ -55,24 +55,24 @@ namespace IdentityServer3.DocumentDb.Entities
         public int SlidingRefreshTokenLifetime { get; set; }
 
         public TokenUsage RefreshTokenUsage { get; set; }
-        public bool UpdateAccessTokenOnRefresh { get; set; }
+        public bool UpdateAccessTokenClaimsOnRefresh { get; set; }
 
         public TokenExpiration RefreshTokenExpiration { get; set; }
 
         public AccessTokenType AccessTokenType { get; set; }
 
         public bool EnableLocalLogin { get; set; }
-        public ICollection<ClientIdPRestriction> IdentityProviderRestrictions { get; set; }
+        public ICollection<string> IdentityProviderRestrictions { get; set; }
 
         public bool IncludeJwtId { get; set; }
 
-        public ICollection<ClientClaim> Claims { get; set; }
+        public ICollection<ClaimLite> Claims { get; set; }
         public bool AlwaysSendClientClaims { get; set; }
         public bool PrefixClientClaims { get; set; }
 
-        public bool AllowAccessToAllGrantTypes { get; set; }
+        public bool AllowAccessToAllCustomGrantTypes { get; set; }
 
-        public ICollection<ClientCustomGrantType> AllowedCustomGrantTypes { get; set; }
-        public ICollection<ClientCorsOrigin> AllowedCorsOrigins { get; set; }
+        public ICollection<string> AllowedCustomGrantTypes { get; set; }
+        public ICollection<string> AllowedCorsOrigins { get; set; }
     }
 }

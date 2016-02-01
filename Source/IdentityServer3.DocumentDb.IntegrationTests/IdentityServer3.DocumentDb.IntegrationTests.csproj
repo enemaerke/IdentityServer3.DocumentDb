@@ -81,7 +81,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ClientRepositoryTests.cs" />
     <Compile Include="Repositories\ConsentRepositoryTests.cs" />
-    <Compile Include="Repositories\ObjectMother.cs" />
     <Compile Include="Repositories\RepoUtil.cs" />
     <Compile Include="Repositories\ScopeRepositoryTests.cs" />
   </ItemGroup>

@@ -36,8 +36,8 @@ namespace IdentityServer3.DocumentDb.Stores
 
         public async Task UpdateAsync(Consent consent)
         {
-            var document = consent.ToModel();
-            await _repository.Upsert(document);
+            var document = consent.ToDocument();
+            await _repository.UpsertConsent(document);
         }
     }
 }

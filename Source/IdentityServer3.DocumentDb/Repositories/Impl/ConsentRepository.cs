@@ -27,7 +27,7 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
             return result.FirstOrDefault();
         }
 
-        public async Task Upsert(ConsentDocument document)
+        public async Task UpsertConsent(ConsentDocument document)
         {
             await base.Upsert(document);
         }

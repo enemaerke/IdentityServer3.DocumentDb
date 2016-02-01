@@ -69,17 +69,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\ClaimLite.cs" />
+    <Compile Include="Entities\ClaimsPrincipalLite.cs" />
     <Compile Include="IdentityServerServiceFactoryExtensions.cs" />
     <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
     <Compile Include="DocumentDbServiceOptions.cs" />
     <Compile Include="Entities\ClientDocument.cs" />
-    <Compile Include="Entities\ClientClaim.cs" />
-    <Compile Include="Entities\ClientCorsOrigin.cs" />
-    <Compile Include="Entities\ClientCustomGrantType.cs" />
-    <Compile Include="Entities\ClientIdPRestriction.cs" />
-    <Compile Include="Entities\ClientPostLogoutRedirectUri.cs" />
-    <Compile Include="Entities\ClientRedirectUri.cs" />
-    <Compile Include="Entities\ClientScope.cs" />
     <Compile Include="Entities\ClientSecret.cs" />
     <Compile Include="Entities\ConsentDocument.cs" />
     <Compile Include="Entities\ScopeDocument.cs" />

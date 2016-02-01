@@ -28,5 +28,10 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
         {
             await base.Upsert(scope);
         }
+
+        public async Task<IEnumerable<ScopeDocument>> GetAllScopes()
+        {
+            return await base.GetAll();
+        }
     }
 }

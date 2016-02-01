@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using IdentityServer3.Core.Models;
 using IdentityServer3.DocumentDb.Repositories.Impl;
+using IdentityServer3.DocumentDb.Tests;
 using NUnit.Framework;
 
 namespace IdentityServer3.DocumentDb.IntegrationTests.Repositories
@@ -30,7 +31,7 @@ namespace IdentityServer3.DocumentDb.IntegrationTests.Repositories
         [Test]
         public async Task CanQueryExistingClient()
         {
-            var client = ObjectMother.CreateClient();
+            var client = ObjectMother.CreateClientDocument();
             var added = await _repo.AddClient(client);
 
             var returned = await _repo.GetByClientId(client.ClientId);

@@ -7,5 +7,6 @@ namespace IdentityServer3.DocumentDb.Repositories
     public interface IScopeRepository
     {
         Task<IEnumerable<ScopeDocument>> GetByScopeNames(string[] scopeNames);
+        Task<IEnumerable<ScopeDocument>> GetAllScopes();
     }
 }

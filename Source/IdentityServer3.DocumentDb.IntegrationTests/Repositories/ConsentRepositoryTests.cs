@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using IdentityServer3.DocumentDb.Repositories.Impl;
+using IdentityServer3.DocumentDb.Tests;
 using NUnit.Framework;
 
 namespace IdentityServer3.DocumentDb.IntegrationTests.Repositories
@@ -18,7 +19,7 @@ namespace IdentityServer3.DocumentDb.IntegrationTests.Repositories
         [Test]
         public async Task CanAddConsent()
         {
-            var consent = ObjectMother.CreateConsent();
+            var consent = ObjectMother.CreateConsentDocument();
             var result = await _repo.AddConsent(consent);
             Assert.NotNull(result);
         }
