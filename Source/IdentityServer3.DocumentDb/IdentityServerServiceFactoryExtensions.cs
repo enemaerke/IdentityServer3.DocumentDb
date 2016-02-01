@@ -29,6 +29,9 @@ namespace IdentityServer3.DocumentDb
             }
         }
 
+        /// <summary>
+        /// Register the operational services, namely the token and consent stores
+        /// </summary>
         public static void RegisterOperationalServices(this IdentityServerServiceFactory factory, DocumentDbServiceOptions options)
         {
             if (factory == null) throw new ArgumentNullException(nameof(factory));
@@ -42,12 +45,18 @@ namespace IdentityServer3.DocumentDb
             factory.RefreshTokenStore = new Registration<IRefreshTokenStore, RefreshTokenStore>();
         }
 
+        /// <summary>
+        /// Register the configuration services, namely the client and scope stores
+        /// </summary>
         public static void RegisterConfigurationServices(this IdentityServerServiceFactory factory, DocumentDbServiceOptions options)
         {
             factory.RegisterClientStore(options);
             factory.RegisterScopeStore(options);
         }
 
+        /// <summary>
+        /// Register the client store and the cors policy store
+        /// </summary>
         public static void RegisterClientStore(this IdentityServerServiceFactory factory, DocumentDbServiceOptions options)
         {
             if (factory == null) throw new ArgumentNullException(nameof(factory));
@@ -59,6 +68,9 @@ namespace IdentityServer3.DocumentDb
             factory.CorsPolicyService = new Registration<ICorsPolicyService, ClientCorsPolicyService>();
         }
 
+        /// <summary>
+        /// Register the scope store
+        /// </summary>
         public static void RegisterScopeStore(this IdentityServerServiceFactory factory, DocumentDbServiceOptions options)
         {
             if (factory == null) throw new ArgumentNullException(nameof(factory));

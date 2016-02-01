@@ -8,6 +8,10 @@ using IdentityServer3.DocumentDb.Repositories.Impl;
 
 namespace IdentityServer3.DocumentDb
 {
+    /// <summary>
+    /// Handles periodic cleanup of expired tokens (refresh tokens, authorization codes, token handles).
+    /// Should be started as part of the IdentityServer setup and stopped as part of the application shutdown 
+    /// </summary>
     public class TokenCleanup
     {
         private readonly static ILog Logger = LogProvider.GetCurrentClassLogger();
@@ -32,6 +36,9 @@ namespace IdentityServer3.DocumentDb
             _tokenHandleRepository = new TokenHandleRepository(connectionSettings);
         }
 
+        /// <summary>
+        /// Start the periodic token cleanup
+        /// </summary>
         public void Start()
         {
             if (_source != null) throw new InvalidOperationException("Already started. Call Stop first.");
@@ -40,6 +47,9 @@ namespace IdentityServer3.DocumentDb
             Task.Factory.StartNew(() => Start(_source.Token));
         }
 
+        /// <summary>
+        /// Stop the periodic token cleanup
+        /// </summary>
         public void Stop()
         {
             if (_source == null) throw new InvalidOperationException("Not started. Call Start first.");
@@ -48,7 +58,7 @@ namespace IdentityServer3.DocumentDb
             _source = null;
         }
 
-        public async Task Start(CancellationToken cancellationToken)
+        protected async Task Start(CancellationToken cancellationToken)
         {
             while (true)
             {
