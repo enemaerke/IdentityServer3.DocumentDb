@@ -13,7 +13,7 @@ namespace IdentityServer3.DocumentDb.Stores
         private readonly IPropertySerializer _propertySerializer;
 
         public RefreshTokenStore(
-            ITokenRepository<RefreshTokenDocument> repository,
+            IRefreshTokenRepository repository,
             IPropertySerializer propertySerializer) : base(repository)
         {
             _propertySerializer = propertySerializer;

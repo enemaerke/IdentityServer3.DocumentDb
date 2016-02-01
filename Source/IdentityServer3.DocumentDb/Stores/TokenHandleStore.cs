@@ -15,7 +15,7 @@ namespace IdentityServer3.DocumentDb.Stores
         private readonly IClientRepository _clientRepository;
 
         public TokenHandleStore(
-            ITokenRepository<TokenHandleDocument> repository,
+            ITokenHandleRepository repository,
             IPropertySerializer propertySerializer,
             IClientRepository clientRepository):base(repository)
         {

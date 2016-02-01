@@ -13,4 +13,10 @@ namespace IdentityServer3.DocumentDb.Repositories
         Task RevokeAsync(string subject, string client);
         Task Store(TInternal store);
     }
+
+    public interface ITokenHandleRepository : ITokenRepository<TokenHandleDocument> { }
+
+    public interface IAuthorizationCodeRepository : ITokenRepository<AuthorizationCodeTokenDocument> { }
+
+    public interface IRefreshTokenRepository : ITokenRepository<RefreshTokenDocument> { }
 }

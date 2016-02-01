@@ -84,6 +84,9 @@
     <Compile Include="Entities\TokenType.cs" />
     <Compile Include="Repositories\IClientRepository.cs" />
     <Compile Include="Repositories\IConsentRepository.cs" />
+    <Compile Include="Repositories\Impl\AuthorizationCodeRepository.cs" />
+    <Compile Include="Repositories\Impl\RefreshTokenRepository.cs" />
+    <Compile Include="Repositories\Impl\TokenHandleRepository.cs" />
     <Compile Include="Serialization\IPropertySerializer.cs" />
     <Compile Include="Repositories\IScopeRepository.cs" />
     <Compile Include="Repositories\ITokenRepository.cs" />

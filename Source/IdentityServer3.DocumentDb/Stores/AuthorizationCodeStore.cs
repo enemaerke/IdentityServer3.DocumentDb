@@ -17,7 +17,7 @@ namespace IdentityServer3.DocumentDb.Stores
         private readonly IPropertySerializer _propertySerializer;
 
         public AuthorizationCodeStore(
-            ITokenRepository<AuthorizationCodeTokenDocument> repository,
+            IAuthorizationCodeRepository repository,
             IClientRepository clientRepository,
             IPropertySerializer propertySerializer) : base(repository)
         {
