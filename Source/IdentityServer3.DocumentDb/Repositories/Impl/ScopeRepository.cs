@@ -5,7 +5,7 @@ using IdentityServer3.DocumentDb.Entities;
 
 namespace IdentityServer3.DocumentDb.Repositories.Impl
 {
-    public class ScopeRepository : CollectionBase, IScopeRepository
+    public class ScopeRepository : RepositoryBase, IScopeRepository
     {
         public ScopeRepository(ConnectionSettings setting):base(DocumentDbNames.ScopeCollectionName, setting) { }
 
@@ -16,7 +16,7 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
             string namesSerialized = string.Join(", ", scopeNames.Select(s => $"'{s}'"));
 
             string sql = $"SELECT * FROM {collectionName} WHERE {collectionName}.Name IN ({namesSerialized})";
-            var query = base._client.CreateDocumentQuery<ScopeDocument>(_collection.DocumentsLink,  
+            var query = base.Client.CreateDocumentQuery<ScopeDocument>(Collection.DocumentsLink,  
                 sql);
             return await base.QueryAsync(query);
         }

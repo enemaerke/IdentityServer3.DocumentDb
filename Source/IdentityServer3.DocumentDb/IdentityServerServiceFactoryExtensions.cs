@@ -2,6 +2,7 @@
 using IdentityServer3.Core.Configuration;
 using IdentityServer3.Core.Services;
 using IdentityServer3.DocumentDb.Repositories.Impl;
+using IdentityServer3.DocumentDb.Services;
 using IdentityServer3.DocumentDb.Stores;
 
 namespace IdentityServer3.DocumentDb
@@ -35,7 +36,7 @@ namespace IdentityServer3.DocumentDb
             var connectionSettings = options.ToConnectionSettings();
             factory.Register(new Registration<ConnectionSettings>(resolver => connectionSettings));
             factory.ClientStore = new Registration<IClientStore, ClientStore>();
-            //factory.CorsPolicyService = new ClientConfigurationCorsPolicyRegistration(options);
+            factory.CorsPolicyService = new Registration<ICorsPolicyService, ClientCorsPolicyService>();
         }
 
         public static void RegisterScopeStore(this IdentityServerServiceFactory factory, DocumentDbServiceOptions options)

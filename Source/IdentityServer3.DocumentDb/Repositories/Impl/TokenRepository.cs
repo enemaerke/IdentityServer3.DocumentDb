@@ -4,7 +4,7 @@ using IdentityServer3.DocumentDb.Util;
 
 namespace IdentityServer3.DocumentDb.Repositories.Impl
 {
-    public class TokenRepository<TInternal> : CollectionBase, ITokenRepository<TInternal>
+    public class TokenRepository<TInternal> : RepositoryBase, ITokenRepository<TInternal>
         where TInternal : TokenDocument
     {
         public TokenRepository(ConnectionSettings connectionSettings) :

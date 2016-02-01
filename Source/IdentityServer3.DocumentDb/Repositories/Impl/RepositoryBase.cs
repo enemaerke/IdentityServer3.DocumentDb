@@ -13,17 +13,17 @@ using Newtonsoft.Json;
 
 namespace IdentityServer3.DocumentDb.Repositories.Impl
 {
-    public class CollectionBase 
+    public class RepositoryBase 
     {
-        private readonly string _collectionName;
-        protected IReliableReadWriteDocumentClient _client;
-        protected DocumentCollection _collection;
-        protected readonly string _dbId; 
+        protected string CollectionName { get; private set; }
+        protected IReliableReadWriteDocumentClient Client { get; private set; }
+        protected DocumentCollection Collection { get; private set; }
+        protected string DatabaseId { get; private set; } 
 
-        protected CollectionBase(string collectionName, ConnectionSettings settings)
+        protected RepositoryBase(string collectionName, ConnectionSettings settings)
         {
-            _dbId = settings.DatabaseId;
-            _collectionName = collectionName;
+            DatabaseId = settings.DatabaseId;
+            CollectionName = collectionName;
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore,
@@ -41,44 +41,44 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
                 ConnectionProtocol = Protocol.Tcp
             });
             var documentRetryStrategy = new DocumentDbRetryStrategy(RetryStrategy.DefaultExponential) {FastFirstRetry = true};
-            _client = client.AsReliable(documentRetryStrategy);
+            Client = client.AsReliable(documentRetryStrategy);
         }
 
         private async Task CreateDatabaseIfNotExist()
         {
-            Database database = _client.CreateDatabaseQuery()
-                .Where(db => db.Id == _dbId)
+            Database database = Client.CreateDatabaseQuery()
+                .Where(db => db.Id == DatabaseId)
                 .AsEnumerable()
                 .FirstOrDefault();
             
             // If the database does not exist, create a new database
             if (database == null)
             {
-                database = await _client.CreateDatabaseAsync(
+                database = await Client.CreateDatabaseAsync(
                     new Database
                     {
-                        Id = _dbId
+                        Id = DatabaseId
                     });
             }
         }
 
         private async Task CreateCollectionIfNotExists()
         {
-            if (_collection != null)
+            if (Collection != null)
                 return;
 
             await CreateDatabaseIfNotExist();
 
-            _collection = _client.CreateDocumentCollectionQuery("dbs/" + _dbId).AsEnumerable()
-                .FirstOrDefault(c => c.Id == _collectionName);
+            Collection = Client.CreateDocumentCollectionQuery("dbs/" + DatabaseId).AsEnumerable()
+                .FirstOrDefault(c => c.Id == CollectionName);
 
             // If the document collection does not exist, create a new collection
-            if (_collection == null)
+            if (Collection == null)
             {
-                _collection = await _client.CreateDocumentCollectionAsync("dbs/" + _dbId,
+                Collection = await Client.CreateDocumentCollectionAsync("dbs/" + DatabaseId,
                     new DocumentCollection
                     {
-                        Id = _collectionName
+                        Id = CollectionName
                     });
                 
             }
@@ -95,14 +95,14 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
             // COMMENTED OUT, THIS SEEMED LIKE A NEATER SOLUTION BUT FAILS IF RESOURCE DOES NOT EXIST
             // cast needed: http://stackoverflow.com/a/27288059/9222
             // see request for better API: https://github.com/Azure/azure-documentdb-dotnet/issues/71
-            //var uri = UriFactory.CreateDocumentUri(_dbId, _collection.Id, id);
-            //var r = await _client.ReadDocumentAsync(uri, new RequestOptions());
+            //var uri = UriFactory.CreateDocumentUri(DatabaseId, Collection.Id, id);
+            //var r = await Client.ReadDocumentAsync(uri, new RequestOptions());
             //return (T)(dynamic)r.Resource;
 
-            var docQuery = _client.CreateDocumentQuery<T>(_collection.DocumentsLink,
+            var docQuery = Client.CreateDocumentQuery<T>(Collection.DocumentsLink,
                 new SqlQuerySpec()
                 {
-                    QueryText = $"SELECT * FROM {_collectionName} x WHERE x.id = @id",
+                    QueryText = $"SELECT * FROM {CollectionName} x WHERE x.id = @id",
                     Parameters = new SqlParameterCollection()
                     {
                         new SqlParameter("@id", id),
@@ -113,7 +113,7 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
 
         protected TDoc GetDocument<TDoc>(Expression<Func<TDoc,bool>> whereClause)
         {
-            return _client.CreateDocumentQuery<TDoc>(_collection.DocumentsLink)
+            return Client.CreateDocumentQuery<TDoc>(Collection.DocumentsLink)
                 .Where(whereClause)
                 .AsEnumerable()
                 .FirstOrDefault();
@@ -121,9 +121,15 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
 
         protected async Task<TDoc> GetDocumentAsync<TDoc>(Expression<Func<TDoc, bool>> whereClause)
         {
-            var query = _client.CreateDocumentQuery<TDoc>(_collection.DocumentsLink)
+            var query = Client.CreateDocumentQuery<TDoc>(Collection.DocumentsLink)
                 .Where(whereClause);
             return await QueryFirstAsync(query);
+        }
+
+        protected async Task<IEnumerable<TDoc>> GetAll<TDoc>()
+        {
+            var query = Client.CreateDocumentQuery<TDoc>(Collection.DocumentsLink);
+            return await QueryAsync(query);
         }
 
         protected async Task<T> QueryFirstAsync<T>(IQueryable<T> query)
@@ -135,7 +141,7 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
 
         protected async Task<IEnumerable<T>> QueryAsync<T>(Expression<Func<T,bool>> whereClause)
         {
-            var query = _client.CreateDocumentQuery<T>(_collection.DocumentsLink)
+            var query = Client.CreateDocumentQuery<T>(Collection.DocumentsLink)
                 .Where(whereClause);
             return await QueryAsync(query);
         }
@@ -160,8 +166,8 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
 
         protected async Task<bool> DeleteById(string id, bool throwIfNotSuccessfull = false)
         {
-            var uri = UriFactory.CreateDocumentUri(_dbId, _collection.Id, id);
-            var response = await _client.DeleteDocumentAsync(uri);
+            var uri = UriFactory.CreateDocumentUri(DatabaseId, Collection.Id, id);
+            var response = await Client.DeleteDocumentAsync(uri);
             int statusCode = (int) response.StatusCode;
             bool successfull = 200 <= statusCode && statusCode < 300;
             if (!successfull && throwIfNotSuccessfull)
@@ -181,7 +187,7 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
 
         protected async Task<T> Upsert<T>(T entity)
         {
-            var response = await _client.UpsertDocumentAsync(UriFactory.CreateDocumentCollectionUri(_dbId, _collection.Id), entity);
+            var response = await Client.UpsertDocumentAsync(UriFactory.CreateDocumentCollectionUri(DatabaseId, Collection.Id), entity);
             //TODO: check response and raise descriptive exception
             return entity;
         }

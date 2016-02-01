@@ -5,7 +5,7 @@ using IdentityServer3.DocumentDb.Entities;
 
 namespace IdentityServer3.DocumentDb.Repositories.Impl
 {
-    public class ConsentRepository : CollectionBase, IConsentRepository
+    public class ConsentRepository : RepositoryBase, IConsentRepository
     {
         public ConsentRepository(ConnectionSettings settings) : base(DocumentDbNames.ConsentCollectionName, settings)
         {
