@@ -112,6 +112,7 @@
     <Compile Include="Stores\ScopeStore.cs" />
     <Compile Include="Stores\TokenHandleStore.cs" />
     <Compile Include="Stores\AbstractTokenStore.cs" />
+    <Compile Include="TokenCleanup.cs" />
     <Compile Include="Util\RelectionUtil.cs" />
   </ItemGroup>
   <ItemGroup>

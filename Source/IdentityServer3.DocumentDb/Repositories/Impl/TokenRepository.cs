@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using IdentityServer3.DocumentDb.Entities;
 using IdentityServer3.DocumentDb.Util;
 
@@ -37,6 +39,11 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
         public async Task Store(TInternal store)
         {
             await base.Upsert(store);
+        }
+
+        public async Task<IEnumerable<TInternal>> GetExpired(DateTimeOffset expiryDate)
+        {
+            return await QueryAsync(x => x.Expiry > expiryDate);
         }
     }
 }

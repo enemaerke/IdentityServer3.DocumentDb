@@ -14,8 +14,8 @@ namespace WebHost.Config
         {
             var efConfig = documentDbServiceOptions;
 
-            //var cleanup = new TokenCleanup(efConfig, 10);
-            //cleanup.Start();
+            var cleanup = new TokenCleanup(efConfig, 10);
+            cleanup.Start();
 
             // these two calls just pre-populate the test DB from the in-memory config
             ConfigureClients(Clients.Get(), efConfig);

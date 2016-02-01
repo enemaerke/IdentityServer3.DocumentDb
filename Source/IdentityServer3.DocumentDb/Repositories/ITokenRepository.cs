@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using IdentityServer3.DocumentDb.Entities;
 
@@ -12,6 +14,7 @@ namespace IdentityServer3.DocumentDb.Repositories
         Task<IEnumerable<TInternal>> GetAllAsync(string subject);
         Task RevokeAsync(string subject, string client);
         Task Store(TInternal store);
+        Task<IEnumerable<TInternal>> GetExpired(DateTimeOffset expiryDate);
     }
 
     public interface ITokenHandleRepository : ITokenRepository<TokenHandleDocument> { }
