@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using IdentityServer3.Core.Models;
@@ -15,6 +17,7 @@ namespace IdentityServer3.DocumentDb.IntegrationTests.Repositories
         public ClientRepositoryTests()
         {
             _repo = new ClientRepository(ConnectionSettingsFactory.Create());
+            RepoUtil.Reset(_repo);
         }
 
         [Test]

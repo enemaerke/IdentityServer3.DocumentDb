@@ -13,12 +13,12 @@ using Newtonsoft.Json;
 
 namespace IdentityServer3.DocumentDb.Repositories.Impl
 {
-    public class RepositoryBase 
+    public class RepositoryBase<T>
     {
-        protected string CollectionName { get; private set; }
-        protected IReliableReadWriteDocumentClient Client { get; private set; }
-        protected DocumentCollection Collection { get; private set; }
-        protected string DatabaseId { get; private set; } 
+        public string CollectionName { get; }
+        public IReliableReadWriteDocumentClient Client { get; private set; }
+        public DocumentCollection Collection { get; private set; }
+        public string DatabaseId { get; } 
 
         protected RepositoryBase(string collectionName, ConnectionSettings settings)
         {
@@ -84,13 +84,7 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
             }
         }
 
-        protected async Task<Document> GetDocument(string id)
-        {
-            var doc = await GetDocumentAsync<Document>(d => d.Id == id);
-            return doc;
-        }
-
-        protected async Task<T> GetById<T>(string id)
+        protected async Task<T> GetById(string id)
         {
             // COMMENTED OUT, THIS SEEMED LIKE A NEATER SOLUTION BUT FAILS IF RESOURCE DOES NOT EXIST
             // cast needed: http://stackoverflow.com/a/27288059/9222
@@ -111,42 +105,42 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
             return await QueryFirstAsync(docQuery);
         }
 
-        protected TDoc GetDocument<TDoc>(Expression<Func<TDoc,bool>> whereClause)
+        protected T GetDocument(Expression<Func<T,bool>> whereClause)
         {
-            return Client.CreateDocumentQuery<TDoc>(Collection.DocumentsLink)
+            return Client.CreateDocumentQuery<T>(Collection.DocumentsLink)
                 .Where(whereClause)
                 .AsEnumerable()
                 .FirstOrDefault();
         }
 
-        protected async Task<TDoc> GetDocumentAsync<TDoc>(Expression<Func<TDoc, bool>> whereClause)
+        protected async Task<T> GetDocumentAsync(Expression<Func<T, bool>> whereClause)
         {
-            var query = Client.CreateDocumentQuery<TDoc>(Collection.DocumentsLink)
+            var query = Client.CreateDocumentQuery<T>(Collection.DocumentsLink)
                 .Where(whereClause);
             return await QueryFirstAsync(query);
         }
 
-        protected async Task<IEnumerable<TDoc>> GetAll<TDoc>()
+        protected async Task<IEnumerable<T>> GetAll()
         {
-            var query = Client.CreateDocumentQuery<TDoc>(Collection.DocumentsLink);
+            var query = Client.CreateDocumentQuery<T>(Collection.DocumentsLink);
             return await QueryAsync(query);
         }
 
-        protected async Task<T> QueryFirstAsync<T>(IQueryable<T> query)
+        protected async Task<T> QueryFirstAsync(IQueryable<T> query)
         {
             var docQuery = query.AsDocumentQuery();
             var result = await docQuery.ExecuteNextAsync<T>();
             return result.AsEnumerable().FirstOrDefault();
         }
 
-        protected async Task<IEnumerable<T>> QueryAsync<T>(Expression<Func<T,bool>> whereClause)
+        protected async Task<IEnumerable<T>> QueryAsync(Expression<Func<T,bool>> whereClause)
         {
             var query = Client.CreateDocumentQuery<T>(Collection.DocumentsLink)
                 .Where(whereClause);
             return await QueryAsync(query);
         }
 
-        protected async Task<IEnumerable<T>> QueryAsync<T>(IQueryable<T> query)
+        protected async Task<IEnumerable<T>> QueryAsync(IQueryable<T> query)
         {
             var docQuery = query.AsDocumentQuery();
             var batches = new List<IEnumerable<T>>();
@@ -175,17 +169,7 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
             return successfull;
         }
 
-        protected bool Exists(string id)
-        {
-            return GetDocument(id).Result != null;
-        }
-
-        protected bool NotExist(string id)
-        {
-            return GetDocument(id).Result == null;
-        }
-
-        protected async Task<T> Upsert<T>(T entity)
+        protected async Task<T> Upsert(T entity)
         {
             var response = await Client.UpsertDocumentAsync(UriFactory.CreateDocumentCollectionUri(DatabaseId, Collection.Id), entity);
             //TODO: check response and raise descriptive exception

@@ -13,6 +13,7 @@ namespace IdentityServer3.DocumentDb.IntegrationTests.Repositories
         public ScopeRepositoryTests()
         {
             _repo = new ScopeRepository(ConnectionSettingsFactory.Create());
+            RepoUtil.Reset(_repo);
         }
 
         [Test]

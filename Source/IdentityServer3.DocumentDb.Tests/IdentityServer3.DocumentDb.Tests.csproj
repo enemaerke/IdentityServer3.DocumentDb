@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A7EF52FC-A994-40E1-82A1-7D7E7EF77DD6}</ProjectGuid>
+    <ProjectGuid>{FC766F13-1961-4A48-AFB0-A4CA08833660}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IdentityServer3.DocumentDb.IntegrationTests</RootNamespace>
-    <AssemblyName>IdentityServer3.DocumentDb.IntegrationTests</AssemblyName>
+    <RootNamespace>IdentityServer3.DocumentDb.Tests</RootNamespace>
+    <AssemblyName>IdentityServer3.DocumentDb.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,18 +42,6 @@
       <HintPath>..\packages\IdentityServer3.2.3.0\lib\net45\IdentityServer3.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Azure.Documents.Client, Version=1.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Azure.DocumentDB.1.5.2\lib\net40\Microsoft.Azure.Documents.Client.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Azure.Documents.Client.TransientFaultHandling, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Azure.DocumentDB.TransientFaultHandling.1.2.0\lib\net45\Microsoft.Azure.Documents.Client.TransientFaultHandling.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -77,28 +64,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConnectionSettingsFactory.cs" />
+    <Compile Include="Mocks\RepoMock.cs" />
+    <Compile Include="ObjectMother.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\ClientRepositoryTests.cs" />
-    <Compile Include="Repositories\ConsentRepositoryTests.cs" />
-    <Compile Include="Repositories\ObjectMother.cs" />
-    <Compile Include="Repositories\RepoUtil.cs" />
-    <Compile Include="Repositories\ScopeRepositoryTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\IdentityServer3.DocumentDb.Tests\IdentityServer3.DocumentDb.Tests.csproj">
-      <Project>{fc766f13-1961-4a48-afb0-a4ca08833660}</Project>
-      <Name>IdentityServer3.DocumentDb.Tests</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IdentityServer3.DocumentDb\IdentityServer3.DocumentDb.csproj">
-      <Project>{53a35221-f187-4d2c-9ff3-af7cfc6639ed}</Project>
-      <Name>IdentityServer3.DocumentDb</Name>
-    </ProjectReference>
+    <Compile Include="Serialization\ClaimsPrincipalSerializationTests.cs" />
+    <Compile Include="Serialization\ClaimsSerializationTests.cs" />
+    <Compile Include="Serialization\ClientSerializationTests.cs" />
+    <Compile Include="Serialization\ScopeSerializationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IdentityServer3.DocumentDb\IdentityServer3.DocumentDb.csproj">
+      <Project>{53a35221-f187-4d2c-9ff3-af7cfc6639ed}</Project>
+      <Name>IdentityServer3.DocumentDb</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

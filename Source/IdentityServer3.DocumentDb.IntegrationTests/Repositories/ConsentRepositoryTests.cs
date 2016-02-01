@@ -12,6 +12,7 @@ namespace IdentityServer3.DocumentDb.IntegrationTests.Repositories
         public ConsentRepositoryTests()
         {
             _repo = new ConsentRepository(ConnectionSettingsFactory.Create());
+            RepoUtil.Reset(_repo);
         }
 
         [Test]

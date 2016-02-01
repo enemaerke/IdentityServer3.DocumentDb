@@ -14,13 +14,13 @@ namespace IdentityServer3.DocumentDb.Serialization
 
     public class ScopeConverter : JsonConverter
     {
-        private readonly IScopeRepository scopeStore;
+        private readonly IScopeRepository _scopeRepo;
 
-        public ScopeConverter(IScopeRepository scopeStore)
+        public ScopeConverter(IScopeRepository scopeRepo)
         {
-            if (scopeStore == null) throw new ArgumentNullException(nameof(scopeStore));
+            if (scopeRepo == null) throw new ArgumentNullException(nameof(scopeRepo));
 
-            this.scopeStore = scopeStore;
+            this._scopeRepo = scopeRepo;
         }
 
         public override bool CanConvert(Type objectType)
@@ -31,7 +31,7 @@ namespace IdentityServer3.DocumentDb.Serialization
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var source = serializer.Deserialize<ScopeLite>(reader);
-            var result = scopeStore.GetByScopeNames(new string[]{source.Name}).Result;
+            var result = _scopeRepo.GetByScopeNames(new string[]{source.Name}).Result;
             return result.Single();
         }
 

@@ -13,13 +13,13 @@ namespace IdentityServer3.DocumentDb.Serialization
 
     public class ClientConverter : JsonConverter
     {
-        private readonly IClientRepository _clientStore;
+        private readonly IClientRepository _clientRepository;
 
-        public ClientConverter(IClientRepository clientStore)
+        public ClientConverter(IClientRepository clientRepository)
         {
-            if (clientStore == null) throw new ArgumentNullException(nameof(clientStore));
+            if (clientRepository == null) throw new ArgumentNullException(nameof(clientRepository));
 
-            _clientStore = clientStore;
+            _clientRepository = clientRepository;
         }
 
         public override bool CanConvert(Type objectType)
@@ -30,7 +30,7 @@ namespace IdentityServer3.DocumentDb.Serialization
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var source = serializer.Deserialize<ClientLite>(reader);
-            var result = _clientStore.GetByClientId(source.ClientId).Result;
+            var result = _clientRepository.GetByClientId(source.ClientId).Result;
             return result;
         }
 

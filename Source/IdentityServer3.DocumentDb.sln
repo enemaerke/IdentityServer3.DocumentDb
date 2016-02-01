@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer3.DocumentDb"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer3.DocumentDb.IntegrationTests", "IdentityServer3.DocumentDb.IntegrationTests\IdentityServer3.DocumentDb.IntegrationTests.csproj", "{A7EF52FC-A994-40E1-82A1-7D7E7EF77DD6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer3.DocumentDb.Tests", "IdentityServer3.DocumentDb.Tests\IdentityServer3.DocumentDb.Tests.csproj", "{FC766F13-1961-4A48-AFB0-A4CA08833660}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{A7EF52FC-A994-40E1-82A1-7D7E7EF77DD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7EF52FC-A994-40E1-82A1-7D7E7EF77DD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7EF52FC-A994-40E1-82A1-7D7E7EF77DD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC766F13-1961-4A48-AFB0-A4CA08833660}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC766F13-1961-4A48-AFB0-A4CA08833660}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC766F13-1961-4A48-AFB0-A4CA08833660}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC766F13-1961-4A48-AFB0-A4CA08833660}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

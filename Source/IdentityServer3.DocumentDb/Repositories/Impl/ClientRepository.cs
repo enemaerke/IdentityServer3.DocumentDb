@@ -4,7 +4,7 @@ using IdentityServer3.DocumentDb.Entities;
 
 namespace IdentityServer3.DocumentDb.Repositories.Impl
 {
-    public class ClientRepository : RepositoryBase, IClientRepository
+    public class ClientRepository : RepositoryBase<ClientDocument>, IClientRepository
     {
         public ClientRepository(ConnectionSettings settings) : base(DocumentDbNames.ClientCollectionName, settings)
         {
@@ -12,17 +12,17 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
 
         public async Task<ClientDocument> GetByClientId(string clientId)
         {
-            return await base.GetDocumentAsync<ClientDocument>(x => x.ClientId == clientId);
+            return await base.GetDocumentAsync(x => x.ClientId == clientId);
         }
 
         public async Task<IEnumerable<ClientDocument>> GetAllClients()
         {
-            return await base.GetAll<ClientDocument>();
+            return await base.GetAll();
         }
 
         public async Task<ClientDocument> AddClient(ClientDocument client)
         {
-            return await base.Upsert<ClientDocument>(client);
+            return await base.Upsert(client);
         }
 
         public async Task<bool> DeleteClientById(string id)
