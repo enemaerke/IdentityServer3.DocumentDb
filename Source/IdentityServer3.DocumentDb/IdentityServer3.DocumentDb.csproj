@@ -69,7 +69,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IdentityServerServiceFactoryExtensions.cs" />
     <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
+    <Compile Include="DocumentDbServiceOptions.cs" />
     <Compile Include="Entities\ClientDocument.cs" />
     <Compile Include="Entities\ClientClaim.cs" />
     <Compile Include="Entities\ClientCorsOrigin.cs" />
