@@ -9,7 +9,7 @@
     <projectUrl>https://github.com/enemaerke/IdentityServer3.DocumentDb</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A DocumentDb persistence layer for IdentityServer3</description>
-    <copyright>Copyright 2015</copyright>
+    <copyright>Copyright 2016</copyright>
     <tags>IdentityServer3 DocumentDb DocDb Azure</tags>
   </metadata>
 </package>
