@@ -20,7 +20,8 @@ namespace IdentityServer3.DocumentDb.Entities
 
         public Claim ToClaim()
         {
-            return new Claim(Type, Value, ValueType, Issuer, OriginalIssuer);
+            var claim = new Claim(Type, Value, ValueType, Issuer, OriginalIssuer);
+            return claim;
         }
 
         public string Type { get; set; }

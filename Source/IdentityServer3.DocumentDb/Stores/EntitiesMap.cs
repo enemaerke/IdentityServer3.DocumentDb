@@ -34,7 +34,7 @@ namespace IdentityServer3.DocumentDb.Stores
                 .ReverseMap()
                 .ConstructUsing(c => new ClaimLite(c));
             Mapper.CreateMap<ClientDocument, Client>(MemberList.Destination)
-                .ForMember(x => x.Claims, opt => opt.MapFrom(src => src.Claims.Select(x => new Claim(x.Type, x.Value))))
+                .ForMember(x => x.Claims, opt => opt.MapFrom(src => src.Claims.Select(x => x.ToClaim())))
                 .ReverseMap();
 
             //consent
