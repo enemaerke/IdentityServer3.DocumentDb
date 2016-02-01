@@ -18,9 +18,13 @@
     </Target>
 
     <Target Name="CreateNuGet" DependsOnTargets="Compile;RunTests">
-        <Exec Command="$(PathToNuGetExecutable) pack IdentityServer3.DocumentDb.csproj -Properties Configuration=$(TheConfiguration)"
-              WorkingDirectory="IdentityServer3.DocumentDb"/>
+		<CallTarget Targets="RunNuGetPack" />
     </Target>
+	
+	<Target Name="RunNuGetPack">
+        <Exec Command="$(PathToNuGetExecutable) pack IdentityServer3.DocumentDb.csproj -Properties Configuration=$(TheConfiguration) -Prop Platform=AnyCPU"
+              WorkingDirectory="IdentityServer3.DocumentDb"/>	
+	</Target>
 
     <Target Name="All" DependsOnTargets="CreateNuGet" />
 

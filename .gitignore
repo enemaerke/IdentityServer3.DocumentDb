@@ -151,3 +151,4 @@ $RECYCLE.BIN/
 .DS_Store
 distribution/
 Source/TestResult.xml
+Source/IdentityServer3.DocumentDb/*.nupkg
