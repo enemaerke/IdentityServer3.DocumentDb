@@ -14,7 +14,7 @@
     </Target>
 
     <Target Name="RunTests" DependsOnTargets="Compile">
-        <Exec Command="$(PathToXUnitExecutable) IdentityServer3.DocumentDb.Tests\bin\$(TheConfiguration)\IdentityServer3.DocumentDb.Tests.dll" />
+        <Exec Command="$(PathToNUnitExecutable) IdentityServer3.DocumentDb.Tests\bin\$(TheConfiguration)\IdentityServer3.DocumentDb.Tests.dll" />
     </Target>
 
     <Target Name="CreateNuGet" DependsOnTargets="Compile;RunTests">
