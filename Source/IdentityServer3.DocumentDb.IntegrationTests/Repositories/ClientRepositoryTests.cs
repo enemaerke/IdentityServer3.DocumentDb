@@ -37,7 +37,11 @@ namespace IdentityServer3.DocumentDb.IntegrationTests.Repositories
             var returned = await _repo.GetByClientId(client.ClientId);
             Assert.NotNull(returned);
 
-            client.ShouldBeEquivalentTo(returned, options => options);
+            client.ShouldBeEquivalentTo(returned, options =>
+            {
+                options.Excluding(x => x.Id);
+                return options;
+            });
 
             var deleteResult = await _repo.DeleteClientById(returned.Id);
             Assert.True(deleteResult);
