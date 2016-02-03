@@ -2,7 +2,6 @@
 using System.Linq;
 using IdentityServer3.Core.Configuration;
 using IdentityServer3.Core.Services;
-using IdentityServer3.DocumentDb.Entities;
 using IdentityServer3.DocumentDb.Repositories;
 using IdentityServer3.DocumentDb.Repositories.Impl;
 using IdentityServer3.DocumentDb.Serialization;
@@ -18,14 +17,19 @@ namespace IdentityServer3.DocumentDb
             if (factory.Registrations.All(x => x.DependencyType != typeof (IPropertySerializer)))
             {
                 var connectionSettings = options.ToConnectionSettings();
-                factory.Register(new Registration<ConnectionSettings>(resolver => connectionSettings));
-                factory.Register(new Registration<IPropertySerializer, JsonPropertySerializer>());
-                factory.Register(new Registration<IConsentRepository, ConsentRepository>());
-                factory.Register(new Registration<IAuthorizationCodeRepository, AuthorizationCodeRepository>());
-                factory.Register(new Registration<IRefreshTokenRepository, RefreshTokenRepository>());
-                factory.Register(new Registration<ITokenHandleRepository, TokenHandleRepository>());
-                factory.Register(new Registration<IClientRepository, ClientRepository>());
-                factory.Register(new Registration<IScopeRepository, ScopeRepository>());
+                factory.Register(new Registration<ConnectionSettings>(connectionSettings));
+                factory.Register(new Registration<IPropertySerializer, JsonPropertySerializer>()
+                {
+                    Mode = RegistrationMode.Singleton,
+                });
+
+                // repository singletons
+                factory.Register(new Registration<IConsentRepository>(new ConsentRepository(connectionSettings)));
+                factory.Register(new Registration<IAuthorizationCodeRepository>(new AuthorizationCodeRepository(connectionSettings)));
+                factory.Register(new Registration<IRefreshTokenRepository>(new RefreshTokenRepository(connectionSettings)));
+                factory.Register(new Registration<ITokenHandleRepository>(new TokenHandleRepository(connectionSettings)));
+                factory.Register(new Registration<IClientRepository>(new ClientRepository(connectionSettings)));
+                factory.Register(new Registration<IScopeRepository>(new ScopeRepository(connectionSettings)));
             }
         }
 

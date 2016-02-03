@@ -34,5 +34,17 @@ namespace IdentityServer3.DocumentDb.IntegrationTests.Repositories
             Assert.NotNull(result);
             Assert.AreEqual(1, result.Count());
         }
+
+        [Test]
+        public async Task CanTestIfEmpty()
+        {
+            RepoUtil.Reset(_repo);
+            var isEmpty = await _repo.IsEmpty();
+            Assert.True(isEmpty);
+
+            await _repo.AddScope(ObjectMother.CreateScopeDocument("myscope"));
+            isEmpty = await _repo.IsEmpty();
+            Assert.False(isEmpty);
+        }
     }
 }

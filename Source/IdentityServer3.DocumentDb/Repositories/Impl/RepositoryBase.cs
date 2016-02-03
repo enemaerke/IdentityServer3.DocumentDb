@@ -175,5 +175,13 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
             //TODO: check response and raise descriptive exception
             return entity;
         }
+
+        public async Task<bool> IsEmpty()
+        {
+            var query = Client.CreateDocumentQuery<T>(Collection.DocumentsLink)
+                .AsDocumentQuery();
+            var result = await query.ExecuteNextAsync<T>();
+            return result.Count == 0;
+        }
     }
 }
