@@ -22,6 +22,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\IdentityServer3.DocumentDb.XML</DocumentationFile>
     <NoWarn>CS1591</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\IdentityServer3.DocumentDb.XML</DocumentationFile>
     <NoWarn>CS1591</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper, Version=4.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
@@ -127,7 +129,6 @@
     <Compile Include="Stores\TokenHandleStore.cs" />
     <Compile Include="Stores\AbstractTokenStore.cs" />
     <Compile Include="TokenCleanup.cs" />
-    <Compile Include="Util\RelectionUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

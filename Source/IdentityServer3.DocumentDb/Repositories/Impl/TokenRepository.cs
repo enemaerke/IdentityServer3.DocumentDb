@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using IdentityServer3.DocumentDb.Entities;
-using IdentityServer3.DocumentDb.Util;
 
 namespace IdentityServer3.DocumentDb.Repositories.Impl
 {

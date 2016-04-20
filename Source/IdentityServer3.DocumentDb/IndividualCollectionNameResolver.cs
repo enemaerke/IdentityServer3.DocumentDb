@@ -3,6 +3,10 @@ using IdentityServer3.DocumentDb.Repositories.Impl;
 
 namespace IdentityServer3.DocumentDb
 {
+    /// <summary>
+    /// Represents an <see cref="ICollectionNameResolver"/> that resolves to individual collections
+    /// in DocumentDb
+    /// </summary>
     public class IndividualCollectionNameResolver : ICollectionNameResolver
     {
         public string ClientCollectionName { get; set; } = DocumentTypeNames.Client;

@@ -19,7 +19,10 @@ namespace IdentityServer3.DocumentDb
         /// The authorization key for connecting to the endpoint
         /// </summary>
         public string AuthorizationKey { get; set; }
-
+        /// <summary>
+        /// Influence which DocumentDb collections are utilized for the individual documents. The
+        /// default is to share a single collection named 'idsrvdocs'
+        /// </summary>
         public ICollectionNameResolver CollectionNameResolver { get; set; } = new SharedCollectionNameResolver("idsrvdocs");
 
         internal ConnectionSettings ToConnectionSettings()
