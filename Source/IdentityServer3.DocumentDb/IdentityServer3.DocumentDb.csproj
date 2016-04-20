@@ -90,6 +90,7 @@
     <Compile Include="Repositories\IConsentRepository.cs" />
     <Compile Include="Repositories\Impl\AuthorizationCodeRepository.cs" />
     <Compile Include="Repositories\Impl\RefreshTokenRepository.cs" />
+    <Compile Include="Repositories\Impl\RepositoryHelper.cs" />
     <Compile Include="Repositories\Impl\TokenHandleRepository.cs" />
     <Compile Include="Serialization\IPropertySerializer.cs" />
     <Compile Include="Repositories\IScopeRepository.cs" />

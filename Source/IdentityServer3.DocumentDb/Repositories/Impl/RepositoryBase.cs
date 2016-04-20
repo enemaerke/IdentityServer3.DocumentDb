@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Client.TransientFaultHandling;
-using Microsoft.Azure.Documents.Client.TransientFaultHandling.Strategies;
 using Microsoft.Azure.Documents.Linq;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Newtonsoft.Json;
 
 namespace IdentityServer3.DocumentDb.Repositories.Impl
@@ -29,19 +27,8 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
                 NullValueHandling = NullValueHandling.Ignore,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             };
-            CreateReliableClient(settings);
+            Client = RepositoryHelper.CreateClient(settings);
             CreateCollectionIfNotExists().Wait();
-        }
-
-        private void CreateReliableClient(ConnectionSettings settings)
-        {
-            var client = new DocumentClient(new Uri(settings.EndpointUri), settings.AuthorizationKey, new ConnectionPolicy
-            {
-                ConnectionMode = ConnectionMode.Direct,
-                ConnectionProtocol = Protocol.Tcp
-            });
-            var documentRetryStrategy = new DocumentDbRetryStrategy(RetryStrategy.DefaultExponential) {FastFirstRetry = true};
-            Client = client.AsReliable(documentRetryStrategy);
         }
 
         private async Task CreateDatabaseIfNotExist()

@@ -23,6 +23,8 @@ using System.Runtime.InteropServices;
 [assembly: Guid("53a35221-f187-4d2c-9ff3-af7cfc6639ed")]
 
 [assembly: InternalsVisibleTo("WebHost")]
+[assembly: InternalsVisibleTo("IdentityServer3.DocumentDb.IntegrationTests")]
+[assembly: InternalsVisibleTo("IdentityServer3.DocumentDb.Tests")]
 
 // Version information for an assembly consists of the following four values:
 //
