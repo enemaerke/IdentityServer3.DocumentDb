@@ -17,15 +17,18 @@ namespace IdentityServer3.DocumentDb
             if (factory.Registrations.All(x => x.DependencyType != typeof (IPropertySerializer)))
             {
                 var connectionSettings = options.ToConnectionSettings();
+                var nameresolver = options.CollectionNameResolver;
                 factory.Register(new Registration<ICollectionNameResolver>(options.CollectionNameResolver));
                 factory.Register(new Registration<ConnectionSettings>(resolver => connectionSettings));
                 factory.Register(new Registration<IPropertySerializer, JsonPropertySerializer>());
-                factory.Register(new Registration<IConsentRepository, ConsentRepository>());
-                factory.Register(new Registration<IAuthorizationCodeRepository, AuthorizationCodeRepository>());
-                factory.Register(new Registration<IRefreshTokenRepository, RefreshTokenRepository>());
-                factory.Register(new Registration<ITokenHandleRepository, TokenHandleRepository>());
-                factory.Register(new Registration<IClientRepository, ClientRepository>());
-                factory.Register(new Registration<IScopeRepository, ScopeRepository>());
+
+                //singletons to avoid excessing docdb client creations
+                factory.Register(new Registration<IConsentRepository>(r => new ConsentRepository(nameresolver, connectionSettings)));
+                factory.Register(new Registration<IAuthorizationCodeRepository>(r => new AuthorizationCodeRepository(nameresolver, connectionSettings)));
+                factory.Register(new Registration<IRefreshTokenRepository>(r => new RefreshTokenRepository(nameresolver, connectionSettings)));
+                factory.Register(new Registration<ITokenHandleRepository>(r => new TokenHandleRepository(nameresolver, connectionSettings)));
+                factory.Register(new Registration<IClientRepository>(r => new ClientRepository(nameresolver, connectionSettings)));
+                factory.Register(new Registration<IScopeRepository>(r => new ScopeRepository(nameresolver, connectionSettings)));
             }
         }
 
