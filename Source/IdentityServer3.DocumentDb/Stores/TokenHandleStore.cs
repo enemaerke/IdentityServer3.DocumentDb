@@ -34,7 +34,7 @@ namespace IdentityServer3.DocumentDb.Stores
                 Audience = document.Audience,
                 Claims = await _propertySerializer.Deserialize<List<Claim>>(document.ClaimsListJson),
                 Client = client.ToModel(),
-                CreationTime = document.CreationTime,
+                CreationTime = document.CreationTimeSecondsSinceEpoch.FromEpoch(),
                 Issuer = document.Issuer,
                 Lifetime = document.Lifetime,
                 Type = document.Type,
@@ -47,7 +47,7 @@ namespace IdentityServer3.DocumentDb.Stores
         {
             await Repository.Store(new TokenHandleDocument()
             {
-                CreationTime = value.CreationTime,
+                CreationTimeSecondsSinceEpoch = value.CreationTime.ToEpoch(),
                 Lifetime = value.Lifetime,
                 Type = value.Type,
                 ClientId = value.ClientId,
@@ -55,8 +55,8 @@ namespace IdentityServer3.DocumentDb.Stores
                 Audience = value.Audience,
                 Issuer = value.Issuer,
                 ClaimsListJson = await _propertySerializer.Serialize(value.Claims),
-                Key = key,
-                Expiry = value.CreationTime.AddSeconds(value.Lifetime),
+                Id = key,
+                ExpirySecondsSinceEpoch = value.CreationTime.AddSeconds(value.Lifetime).ToEpoch(),
             });
         }
     }

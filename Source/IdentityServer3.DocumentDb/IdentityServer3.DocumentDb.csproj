@@ -73,8 +73,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DateTimeOffsetExtensions.cs" />
+    <Compile Include="Entities\AuthorizationCodeTokenDocument.cs" />
     <Compile Include="Entities\ClaimLite.cs" />
     <Compile Include="Entities\ClaimsPrincipalLite.cs" />
+    <Compile Include="Entities\DocumentBase.cs" />
+    <Compile Include="Entities\DocumentTypeNames.cs" />
+    <Compile Include="Entities\IDocument.cs" />
+    <Compile Include="Entities\RefreshTokenDocument.cs" />
+    <Compile Include="Entities\TokenHandleDocument.cs" />
+    <Compile Include="ICollectionNameResolver.cs" />
     <Compile Include="IdentityServerServiceFactoryExtensions.cs" />
     <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
     <Compile Include="DocumentDbServiceOptions.cs" />
@@ -86,6 +94,7 @@
     <Compile Include="Entities\ScopeSecret.cs" />
     <Compile Include="Entities\TokenDocument.cs" />
     <Compile Include="Entities\TokenType.cs" />
+    <Compile Include="IndividualCollectionNameResolver.cs" />
     <Compile Include="Repositories\IClientRepository.cs" />
     <Compile Include="Repositories\IConsentRepository.cs" />
     <Compile Include="Repositories\Impl\AuthorizationCodeRepository.cs" />
@@ -100,7 +109,6 @@
     <Compile Include="Repositories\Impl\RepositoryBase.cs" />
     <Compile Include="Repositories\Impl\ConnectionSettings.cs" />
     <Compile Include="Repositories\Impl\ConsentRepository.cs" />
-    <Compile Include="Repositories\Impl\DocumentDbNames.cs" />
     <Compile Include="Repositories\Impl\ScopeRepository.cs" />
     <Compile Include="Repositories\Impl\TokenRepository.cs" />
     <Compile Include="Serialization\ClaimConverter.cs" />
@@ -109,6 +117,7 @@
     <Compile Include="Serialization\JsonPropertySerializer.cs" />
     <Compile Include="Serialization\ScopeConverter.cs" />
     <Compile Include="Services\ClientCorsPolicyService.cs" />
+    <Compile Include="SharedCollectionNameResolver.cs" />
     <Compile Include="Stores\AuthorizationCodeStore.cs" />
     <Compile Include="Stores\ClientStore.cs" />
     <Compile Include="Stores\ConsentStore.cs" />

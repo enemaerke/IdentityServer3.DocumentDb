@@ -13,7 +13,7 @@ namespace IdentityServer3.DocumentDb.IntegrationTests.Repositories
 
         public ScopeRepositoryTests()
         {
-            _repo = new ScopeRepository(ConnectionSettingsFactory.Create());
+            _repo = new ScopeRepository(TestFactory.SharedCollection, TestFactory.CreateConnectionSettings());
             RepoUtil.Reset(_repo);
         }
 
@@ -23,6 +23,19 @@ namespace IdentityServer3.DocumentDb.IntegrationTests.Repositories
             var result = await _repo.GetByScopeNames(new[] {"some", "scope"});
             Assert.NotNull(result);
             Assert.AreEqual(0, result.Count());
+        }
+
+        [Test]
+        public async Task CanGetAll()
+        {
+            RepoUtil.Reset(_repo);
+
+            await _repo.AddScope(ObjectMother.CreateScopeDocument("scope1"));
+            await _repo.AddScope(ObjectMother.CreateScopeDocument("scope2"));
+            await _repo.AddScope(ObjectMother.CreateScopeDocument("scope3"));
+
+            var result = await _repo.GetAllScopes();
+            Assert.AreEqual(3, result.Count());
         }
 
         [Test]

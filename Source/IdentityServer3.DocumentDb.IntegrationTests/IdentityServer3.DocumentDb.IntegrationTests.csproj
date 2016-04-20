@@ -77,10 +77,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConnectionSettingsFactory.cs" />
+    <Compile Include="TestFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\AuthorizationCodeTokenRepositoryTests.cs" />
+    <Compile Include="Repositories\BaseTokenRepositoryTest.cs" />
     <Compile Include="Repositories\ClientRepositoryTests.cs" />
     <Compile Include="Repositories\ConsentRepositoryTests.cs" />
+    <Compile Include="Repositories\RefreshTokenRepositoryTests.cs" />
     <Compile Include="Repositories\RepositoryFixture.cs" />
     <Compile Include="Repositories\RepoUtil.cs" />
     <Compile Include="Repositories\ScopeRepositoryTests.cs" />

@@ -22,8 +22,9 @@ namespace IdentityServer3.DocumentDb.Stores
 
         public async Task<TReturn> GetAsync(string key)
         {
+            var nowInEpoch = DateTimeOffset.UtcNow.ToEpoch();
             var token = await Repository.GetAsync(key);
-            if (token != null && token.Expiry < DateTimeOffset.UtcNow)
+            if (token != null && token.ExpirySecondsSinceEpoch < nowInEpoch)
                 return null;
 
             return await Convert(token);
@@ -36,11 +37,12 @@ namespace IdentityServer3.DocumentDb.Stores
 
         public async Task<IEnumerable<ITokenMetadata>> GetAllAsync(string subject)
         {
+            var nowInEpoch = DateTimeOffset.UtcNow.ToEpoch();
             var all = await Repository.GetAllAsync(subject);
             List<TReturn> list = new List<TReturn>();
             foreach (var a in all)
             {
-                if (!(a.Expiry < DateTimeOffset.UtcNow))
+                if (!(a.ExpirySecondsSinceEpoch < nowInEpoch))
                     list.Add(await Convert(a));
             }
             return list;

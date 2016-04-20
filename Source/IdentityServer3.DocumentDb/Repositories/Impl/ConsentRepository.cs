@@ -7,13 +7,8 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
 {
     public class ConsentRepository : RepositoryBase<ConsentDocument>, IConsentRepository
     {
-        public ConsentRepository(ConnectionSettings settings) : base(DocumentDbNames.ConsentCollectionName, settings)
+        public ConsentRepository(ICollectionNameResolver resolver, ConnectionSettings settings) : base(resolver.ConsentCollectionName, DocumentTypeNames.Consent, settings)
         {
-        }
-
-        public async Task<ConsentDocument> AddConsent(ConsentDocument consentDocument)
-        {
-            return await base.Upsert(consentDocument);
         }
 
         public async Task<IEnumerable<ConsentDocument>> GetConsentBySubject(string subject)

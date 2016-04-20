@@ -20,6 +20,8 @@ namespace IdentityServer3.DocumentDb
         /// </summary>
         public string AuthorizationKey { get; set; }
 
+        public ICollectionNameResolver CollectionNameResolver { get; set; } = new SharedCollectionNameResolver("idsrvdocs");
+
         internal ConnectionSettings ToConnectionSettings()
         {
             return new ConnectionSettings()

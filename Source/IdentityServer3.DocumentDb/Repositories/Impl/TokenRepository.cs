@@ -9,8 +9,8 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
     public class TokenRepository<TInternal> : RepositoryBase<TInternal>, ITokenRepository<TInternal>
         where TInternal : TokenDocument
     {
-        public TokenRepository(ConnectionSettings connectionSettings) :
-            base(ReflectionUtil.GetAttributeValue<TInternal, CollectionNameAttribute,string>(a => a.Name), connectionSettings)
+        public TokenRepository(string collectionName, string documentType, ConnectionSettings connectionSettings) :
+            base(collectionName, documentType, connectionSettings)
         {
         } 
 
@@ -21,7 +21,7 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
 
         public async Task<TInternal> GetAsync(string key)
         {
-            return await GetDocumentAsync(x => x.Key == key);
+            return await GetDocumentAsync(x => x.Id == key);
         }
 
         public async Task RemoveAsync(string key)
@@ -33,7 +33,7 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
         {
             var toBeDeleted = await QueryAsync(x => x.ClientId == client && x.SubjectId == subject);
             foreach (var item in toBeDeleted)
-                await base.DeleteById(item.Key);
+                await base.DeleteById(item.Id);
         }
 
         public async Task Store(TInternal store)
@@ -43,7 +43,8 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
 
         public async Task<IEnumerable<TInternal>> GetExpired(DateTimeOffset expiryDate)
         {
-            return await QueryAsync(x => x.Expiry > expiryDate);
+            var epochSeconds = expiryDate.ToEpoch();
+            return await QueryAsync(x => x.ExpirySecondsSinceEpoch < epochSeconds);
         }
     }
 }

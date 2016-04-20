@@ -100,7 +100,7 @@ namespace IdentityServer3.DocumentDb.Tests
             return CreateClient(id).ToDocument();
         }
 
-        public static Consent CreateConsent(string clientId = null)
+        public static Consent CreateConsent(string clientId = null, string subjectId = null)
         {
             return new Consent()
             {
@@ -109,13 +109,13 @@ namespace IdentityServer3.DocumentDb.Tests
                 {
                     "scope1"
                 },
-                Subject = "subjectid",
+                Subject = subjectId ?? NewInt32().ToString(),
             };
         }
 
-        public static ConsentDocument CreateConsentDocument(string clientId = null)
+        public static ConsentDocument CreateConsentDocument(string clientId = null, string subjectId = null)
         {
-            return CreateConsent(clientId).ToDocument();
+            return CreateConsent(clientId,subjectId).ToDocument();
         }
 
         public static Scope CreateScope(string scopeName = null)
@@ -152,6 +152,61 @@ namespace IdentityServer3.DocumentDb.Tests
         public static ScopeDocument CreateScopeDocument(string scopeName = null)
         {
             return CreateScope(scopeName).ToDocument();
+        }
+
+        public static TokenHandleDocument CreateTokenHandleDocument(string key, string clientId = null, string subjectId = null)
+        {
+            return new TokenHandleDocument()
+            {
+                Audience = "aud",
+                ClaimsListJson = "claimsjson",
+                ClientId = clientId ?? NewInt32().ToString(),
+                CreationTimeSecondsSinceEpoch = DateTimeOffset.Now.ToEpoch(),
+                ExpirySecondsSinceEpoch = DateTimeOffset.Now.ToEpoch(),
+                Issuer = "issuer",
+                Id = key,
+                Lifetime = 10,
+                SubjectId = subjectId ?? NewInt32().ToString(),
+                Type = "type",
+                Version = 1
+            };
+        }
+
+        public static RefreshTokenDocument CreateRefreshTokenDocument(string key, string clientId = null, string subjectId = null)
+        {
+            return new RefreshTokenDocument()
+            {
+                ClientId = clientId ?? NewInt32().ToString(),
+                CreationTimeSecondsSinceEpoch = DateTimeOffset.Now.ToEpoch(),
+                ExpirySecondsSinceEpoch = DateTimeOffset.Now.ToEpoch(),
+                Id = key,
+                SubjectId = subjectId ?? NewInt32().ToString(),
+                Version = 1,
+
+                AccessTokenJson = "accesstokenjson",
+                SubjectJson = "subjectjson",
+                LifeTime = 10
+            };
+        }
+
+        public static AuthorizationCodeTokenDocument CreateAuthorizationCodeTokenDocument(string key, string clientId = null, string subjectId = null)
+        {
+            return new AuthorizationCodeTokenDocument()
+            {
+                ClientId = clientId ?? NewInt32().ToString(),
+                CreationTimeSecondsSinceEpoch = DateTimeOffset.Now.ToEpoch(),
+                ExpirySecondsSinceEpoch = DateTimeOffset.Now.ToEpoch(),
+                Id = key,
+                SubjectId = subjectId ?? NewInt32().ToString(),
+
+                IsOpenId = true,
+                SubjectJson = "subjectjson",
+                Nonce = "nonce",
+                RequestScopesJson = "requestscopesjson",
+                RedirectUri = "redirecturi",
+                WasConsentShown = true,
+                SessionId = "sessionid",
+            };
         }
     }
 }

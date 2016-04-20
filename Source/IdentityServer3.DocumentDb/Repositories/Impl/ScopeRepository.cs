@@ -7,7 +7,7 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
 {
     public class ScopeRepository : RepositoryBase<ScopeDocument>, IScopeRepository
     {
-        public ScopeRepository(ConnectionSettings setting):base(DocumentDbNames.ScopeCollectionName, setting) { }
+        public ScopeRepository(ICollectionNameResolver resolver, ConnectionSettings setting):base(resolver.ScopeCollectionName, DocumentTypeNames.Scope, setting) { }
 
         public async Task<IEnumerable<ScopeDocument>> GetByScopeNames(string[] scopeNames)
         {
@@ -15,10 +15,10 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
             //https://azure.microsoft.com/en-us/blog/new-documentdb-sql-keywords-operators-and-functions/
 
             //TODO: sql injection sanitized somehow?
-            string collectionName = DocumentDbNames.ScopeCollectionName;
+            string collectionName = CollectionName;
             string namesSerialized = string.Join(", ", scopeNames.Select(s => $"'{s}'"));
 
-            string sql = $"SELECT * FROM {collectionName} WHERE {collectionName}.Name IN ({namesSerialized})";
+            string sql = $"SELECT * FROM {collectionName} WHERE {collectionName}.doc_type = '{DocumentTypeNames.Scope}' AND {collectionName}.Name IN ({namesSerialized})";
             var query = base.Client.CreateDocumentQuery<ScopeDocument>(Collection.DocumentsLink,  
                 sql);
             return await base.QueryAsync(query);

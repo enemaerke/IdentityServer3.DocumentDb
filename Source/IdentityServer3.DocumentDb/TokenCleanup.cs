@@ -31,9 +31,9 @@ namespace IdentityServer3.DocumentDb
             var connectionSettings = options.ToConnectionSettings();
             this._interval = TimeSpan.FromSeconds(interval);
 
-            _refreshTokenRepository = new RefreshTokenRepository(connectionSettings);
-            _authorizationCodeRepository = new AuthorizationCodeRepository(connectionSettings);
-            _tokenHandleRepository = new TokenHandleRepository(connectionSettings);
+            _refreshTokenRepository = new RefreshTokenRepository(options.CollectionNameResolver, connectionSettings);
+            _authorizationCodeRepository = new AuthorizationCodeRepository(options.CollectionNameResolver, connectionSettings);
+            _tokenHandleRepository = new TokenHandleRepository(options.CollectionNameResolver, connectionSettings);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace IdentityServer3.DocumentDb
         {
             var tooOld = await repo.GetExpired(expiryDate);
             foreach (var item in tooOld)
-                await repo.RemoveAsync(item.Key);
+                await repo.RemoveAsync(item.Id);
         }
 
         private async Task ClearTokens()

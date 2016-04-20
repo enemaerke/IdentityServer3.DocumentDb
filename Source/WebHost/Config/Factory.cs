@@ -33,7 +33,7 @@ namespace WebHost.Config
 
         public static void ConfigureClients(IEnumerable<Client> clients, DocumentDbServiceOptions options)
         {
-            ClientRepository clientRepository = new ClientRepository(options.ToConnectionSettings());
+            ClientRepository clientRepository = new ClientRepository(options.CollectionNameResolver, options.ToConnectionSettings());
             var allClients = clientRepository.GetAllClients().Result;
             if (!allClients.Any())
             {
@@ -46,7 +46,7 @@ namespace WebHost.Config
 
         public static void ConfigureScopes(IEnumerable<Scope> scopes, DocumentDbServiceOptions options)
         {
-            ScopeRepository scopeRepository = new ScopeRepository(options.ToConnectionSettings());
+            ScopeRepository scopeRepository = new ScopeRepository(options.CollectionNameResolver, options.ToConnectionSettings());
             var allScopes = scopeRepository.GetAllScopes().Result;
             if (!allScopes.Any())
             {

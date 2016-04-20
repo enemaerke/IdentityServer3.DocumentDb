@@ -7,7 +7,7 @@ namespace IdentityServer3.DocumentDb.IntegrationTests
     /// <summary>
     /// Test helper that facilitates connection settings for testing
     /// </summary>
-    public static class ConnectionSettingsFactory
+    public static class TestFactory
     {
         private static readonly string s_dbid;
         private static readonly string s_endpointuri;
@@ -22,14 +22,17 @@ namespace IdentityServer3.DocumentDb.IntegrationTests
             return value;
         }
 
-        static ConnectionSettingsFactory()
+        static TestFactory()
         {
             s_dbid = GetValue("DatabaseId");
             s_endpointuri = GetValue("EndpointUri");
             s_authkey = GetValue("AuthorizationKey");
         }
 
-        public static ConnectionSettings Create()
+        public static ICollectionNameResolver IndividualCollections { get; } = new IndividualCollectionNameResolver();
+        public static ICollectionNameResolver SharedCollection { get; } = new SharedCollectionNameResolver("idsrvdocs");
+
+        public static ConnectionSettings CreateConnectionSettings()
         {
             return new ConnectionSettings()
             {

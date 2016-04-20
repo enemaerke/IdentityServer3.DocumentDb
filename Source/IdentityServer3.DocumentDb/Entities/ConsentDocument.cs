@@ -4,10 +4,9 @@ using Newtonsoft.Json;
 
 namespace IdentityServer3.DocumentDb.Entities
 {
-    public class ConsentDocument
+    public class ConsentDocument : DocumentBase
     {
-        [JsonProperty("id")]
-        public string Id { get { return Subject + "_" + ClientId;} }
+        public override string Id { get { return Subject + "_" + ClientId;} }
 
         [StringLength(200)]
         public string Subject { get; set; }
@@ -17,5 +16,7 @@ namespace IdentityServer3.DocumentDb.Entities
 
         [Required]
         public string[] Scopes { get; set; }
+
+        public override string DocType { get { return DocumentTypeNames.Consent; } }
     }
 }

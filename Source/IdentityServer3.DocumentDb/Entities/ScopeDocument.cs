@@ -4,10 +4,8 @@ using Newtonsoft.Json;
 
 namespace IdentityServer3.DocumentDb.Entities
 {
-    public class ScopeDocument
+    public class ScopeDocument : DocumentBase
     {
-        [JsonProperty("id")]
-        public string Id { get; set; }
         public bool Enabled { get; set; }
         
         [Required]
@@ -33,5 +31,6 @@ namespace IdentityServer3.DocumentDb.Entities
         public bool ShowInDiscoveryDocument { get; set; }
         public bool AllowUnrestrictedIntrospection { get; set; }
 
+        public override string DocType {get { return DocumentTypeNames.Scope; }}
     }
 }

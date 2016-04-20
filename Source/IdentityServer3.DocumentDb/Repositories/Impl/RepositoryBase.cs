@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using IdentityServer3.DocumentDb.Entities;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Client.TransientFaultHandling;
@@ -11,15 +12,17 @@ using Newtonsoft.Json;
 
 namespace IdentityServer3.DocumentDb.Repositories.Impl
 {
-    public class RepositoryBase<T>
+    public class RepositoryBase<T> where T:DocumentBase
     {
+        private readonly string _documentType;
         public string CollectionName { get; }
         public IReliableReadWriteDocumentClient Client { get; private set; }
         public DocumentCollection Collection { get; private set; }
         public string DatabaseId { get; } 
 
-        protected RepositoryBase(string collectionName, ConnectionSettings settings)
+        protected RepositoryBase(string collectionName, string documentType, ConnectionSettings settings)
         {
+            _documentType = documentType;
             DatabaseId = settings.DatabaseId;
             CollectionName = collectionName;
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
@@ -73,47 +76,25 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
 
         protected async Task<T> GetById(string id)
         {
-            // COMMENTED OUT, THIS SEEMED LIKE A NEATER SOLUTION BUT FAILS IF RESOURCE DOES NOT EXIST
-            // cast needed: http://stackoverflow.com/a/27288059/9222
-            // see request for better API: https://github.com/Azure/azure-documentdb-dotnet/issues/71
-            //var uri = UriFactory.CreateDocumentUri(DatabaseId, Collection.Id, id);
-            //var r = await Client.ReadDocumentAsync(uri, new RequestOptions());
-            //return (T)(dynamic)r.Resource;
-
-            var docQuery = Client.CreateDocumentQuery<T>(Collection.DocumentsLink,
-                new SqlQuerySpec()
-                {
-                    QueryText = $"SELECT * FROM {CollectionName} x WHERE x.id = @id",
-                    Parameters = new SqlParameterCollection()
-                    {
-                        new SqlParameter("@id", id),
-                    }
-                });
+            var docQuery = Client.CreateDocumentQuery<T>(Collection.DocumentsLink).Where(x => x.Id == id && x.DocType == _documentType);
             return await QueryFirstAsync(docQuery);
-        }
-
-        protected T GetDocument(Expression<Func<T,bool>> whereClause)
-        {
-            return Client.CreateDocumentQuery<T>(Collection.DocumentsLink)
-                .Where(whereClause)
-                .AsEnumerable()
-                .FirstOrDefault();
         }
 
         protected async Task<T> GetDocumentAsync(Expression<Func<T, bool>> whereClause)
         {
             var query = Client.CreateDocumentQuery<T>(Collection.DocumentsLink)
+                .Where(x => x.DocType == _documentType)
                 .Where(whereClause);
             return await QueryFirstAsync(query);
         }
 
         protected async Task<IEnumerable<T>> GetAll()
         {
-            var query = Client.CreateDocumentQuery<T>(Collection.DocumentsLink);
+            var query = Client.CreateDocumentQuery<T>(Collection.DocumentsLink).Where(x => x.DocType == _documentType);
             return await QueryAsync(query);
         }
 
-        protected async Task<T> QueryFirstAsync(IQueryable<T> query)
+        private async Task<T> QueryFirstAsync(IQueryable<T> query)
         {
             var docQuery = query.AsDocumentQuery();
             var result = await docQuery.ExecuteNextAsync<T>();
@@ -123,6 +104,7 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
         protected async Task<IEnumerable<T>> QueryAsync(Expression<Func<T,bool>> whereClause)
         {
             var query = Client.CreateDocumentQuery<T>(Collection.DocumentsLink)
+                .Where(x => x.DocType == _documentType)
                 .Where(whereClause);
             return await QueryAsync(query);
         }

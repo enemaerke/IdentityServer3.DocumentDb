@@ -28,7 +28,7 @@ namespace IdentityServer3.DocumentDb.Stores
             {
                 AccessToken = await _propertySerializer.Deserialize<Token>(document.AccessTokenJson),
                 Version = document.Version,
-                CreationTime = document.CreationTime,
+                CreationTime = document.CreationTimeSecondsSinceEpoch.FromEpoch(),
                 LifeTime = document.LifeTime,
                 Subject = await _propertySerializer.Deserialize<ClaimsPrincipal>(document.SubjectJson),
             };
@@ -39,10 +39,10 @@ namespace IdentityServer3.DocumentDb.Stores
             await Repository.Store(new RefreshTokenDocument()
             {
                 ClientId = value.ClientId,
-                Key = key,
+                Id = key,
                 SubjectId = value.SubjectId,
                 AccessTokenJson = await _propertySerializer.Serialize(value.AccessToken),
-                CreationTime = value.CreationTime,
+                CreationTimeSecondsSinceEpoch = value.CreationTime.ToEpoch(),
                 LifeTime = value.LifeTime,
                 Version = value.Version,
                 SubjectJson = await _propertySerializer.Serialize(value.Subject),

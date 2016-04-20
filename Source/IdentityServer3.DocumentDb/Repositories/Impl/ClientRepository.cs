@@ -6,7 +6,7 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
 {
     public class ClientRepository : RepositoryBase<ClientDocument>, IClientRepository
     {
-        public ClientRepository(ConnectionSettings settings) : base(DocumentDbNames.ClientCollectionName, settings)
+        public ClientRepository(ICollectionNameResolver resolver, ConnectionSettings settings) : base(resolver.ClientCollectionName, DocumentTypeNames.Client, settings)
         {
         }
 

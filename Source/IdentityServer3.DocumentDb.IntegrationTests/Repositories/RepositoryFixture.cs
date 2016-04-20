@@ -17,7 +17,7 @@ namespace IdentityServer3.DocumentDb.IntegrationTests.Repositories
         {
             try
             {
-                var settings = ConnectionSettingsFactory.Create();
+                var settings = TestFactory.CreateConnectionSettings();
                 Console.WriteLine("Delete the database on FixtureTearDown: " + settings.DatabaseId);
                 var client = RepositoryHelper.CreateClient(settings);
 

@@ -4,7 +4,8 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
 {
     public class AuthorizationCodeRepository : TokenRepository<AuthorizationCodeTokenDocument>, IAuthorizationCodeRepository
     {
-        public AuthorizationCodeRepository(ConnectionSettings connectionSettings) : base(connectionSettings)
+        public AuthorizationCodeRepository(ICollectionNameResolver resolver, ConnectionSettings connectionSettings) 
+            : base(resolver.AuthorizationCodeCollectionName, DocumentTypeNames.AuthorizationCode, connectionSettings)
         {
         }
     }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using IdentityServer3.DocumentDb.Entities;
 using IdentityServer3.DocumentDb.Repositories.Impl;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
@@ -7,8 +8,11 @@ namespace IdentityServer3.DocumentDb.IntegrationTests.Repositories
 {
     public static class RepoUtil
     {
-        public static void Reset<T>(RepositoryBase<T> repo)
+        public static void Reset<T>(RepositoryBase<T> repo) where T : DocumentBase
         {
+            if (repo == null)
+                return;
+
             var getAllQuery = repo.Client.CreateDocumentQuery(repo.Collection.DocumentsLink);
             var docQuery = getAllQuery.AsDocumentQuery();
             var idList = new List<string>();

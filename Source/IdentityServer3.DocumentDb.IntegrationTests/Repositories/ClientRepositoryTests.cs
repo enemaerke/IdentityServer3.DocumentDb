@@ -17,7 +17,7 @@ namespace IdentityServer3.DocumentDb.IntegrationTests.Repositories
 
         public ClientRepositoryTests()
         {
-            _repo = new ClientRepository(ConnectionSettingsFactory.Create());
+            _repo = new ClientRepository(TestFactory.SharedCollection, TestFactory.CreateConnectionSettings());
             RepoUtil.Reset(_repo);
         }
 
@@ -26,6 +26,19 @@ namespace IdentityServer3.DocumentDb.IntegrationTests.Repositories
         {
             var result = await _repo.GetByClientId(Guid.NewGuid().ToString());
             Assert.IsNull(result);
+        }
+
+        [Test]
+        public async Task CanGetAll()
+        {
+            RepoUtil.Reset(_repo);
+
+            await _repo.AddClient(ObjectMother.CreateClientDocument("id1"));
+            await _repo.AddClient(ObjectMother.CreateClientDocument("id2"));
+            await _repo.AddClient(ObjectMother.CreateClientDocument("id3"));
+
+            var result = await _repo.GetAllClients();
+            Assert.AreEqual(3, result.Count());
         }
 
         [Test]

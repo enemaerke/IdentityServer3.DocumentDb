@@ -33,7 +33,7 @@ namespace IdentityServer3.DocumentDb.Stores
             return new AuthorizationCode()
             {
                 Client = (await _clientRepository.GetByClientId(document.ClientId)).ToModel(),
-                CreationTime = document.CreationTime,
+                CreationTime = document.CreationTimeSecondsSinceEpoch.FromEpoch(),
                 IsOpenId = document.IsOpenId,
                 Nonce = document.Nonce,
                 RedirectUri = document.RedirectUri,
@@ -53,8 +53,8 @@ namespace IdentityServer3.DocumentDb.Stores
             await Repository.Store(new AuthorizationCodeTokenDocument()
             {
                 ClientId = value.ClientId,
-                CreationTime = value.CreationTime,
-                Key = key,
+                CreationTimeSecondsSinceEpoch = value.CreationTime.ToEpoch(),
+                Id = key,
                 SubjectId = value.SubjectId,
                 Nonce = value.Nonce,
                 RedirectUri = value.RedirectUri,
