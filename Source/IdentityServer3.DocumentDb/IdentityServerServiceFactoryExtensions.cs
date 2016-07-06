@@ -23,12 +23,12 @@ namespace IdentityServer3.DocumentDb
                 factory.Register(new Registration<IPropertySerializer, JsonPropertySerializer>());
 
                 //singletons to avoid excessing docdb client creations
-                factory.Register(new Registration<IConsentRepository>(r => new ConsentRepository(nameresolver, connectionSettings)));
-                factory.Register(new Registration<IAuthorizationCodeRepository>(r => new AuthorizationCodeRepository(nameresolver, connectionSettings)));
-                factory.Register(new Registration<IRefreshTokenRepository>(r => new RefreshTokenRepository(nameresolver, connectionSettings)));
-                factory.Register(new Registration<ITokenHandleRepository>(r => new TokenHandleRepository(nameresolver, connectionSettings)));
-                factory.Register(new Registration<IClientRepository>(r => new ClientRepository(nameresolver, connectionSettings)));
-                factory.Register(new Registration<IScopeRepository>(r => new ScopeRepository(nameresolver, connectionSettings)));
+                factory.Register(new Registration<IConsentRepository>(new ConsentRepository(nameresolver, connectionSettings)));
+                factory.Register(new Registration<IAuthorizationCodeRepository>(new AuthorizationCodeRepository(nameresolver, connectionSettings)));
+                factory.Register(new Registration<IRefreshTokenRepository>(new RefreshTokenRepository(nameresolver, connectionSettings)));
+                factory.Register(new Registration<ITokenHandleRepository>(new TokenHandleRepository(nameresolver, connectionSettings)));
+                factory.Register(new Registration<IClientRepository>(new ClientRepository(nameresolver, connectionSettings)));
+                factory.Register(new Registration<IScopeRepository>(new ScopeRepository(nameresolver, connectionSettings)));
             }
         }
 
