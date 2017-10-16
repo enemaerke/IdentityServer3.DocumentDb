@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace IdentityServer3.DocumentDb.Repositories.Impl
 {
-    public class RepositoryBase<T> where T:DocumentBase
+    public class RepositoryBase<T>: IDisposable where T:DocumentBase
     {
         private readonly string _documentType;
         public string CollectionName { get; }
@@ -151,6 +151,11 @@ namespace IdentityServer3.DocumentDb.Repositories.Impl
                 .AsDocumentQuery();
             var result = await query.ExecuteNextAsync<T>();
             return result.Count == 0;
+        }
+
+        public void Dispose()
+        {
+            Client.Dispose();
         }
     }
 }
