@@ -15,7 +15,6 @@ namespace WebHost
         {
             Log.Logger = new LoggerConfiguration()
                .MinimumLevel.Debug()
-               .WriteTo.Trace()
                .CreateLogger();
 
             appBuilder.Map("/core", core =>

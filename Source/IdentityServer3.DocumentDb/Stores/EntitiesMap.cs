@@ -10,37 +10,46 @@ namespace IdentityServer3.DocumentDb.Stores
 {
     public static class EntitiesMap
     {
+        public static IMapper Mapper
+        {
+            get;
+            set;
+        }
+
         static EntitiesMap()
         {
-            //scope
-            Mapper.CreateMap<ScopeDocument, Scope>(MemberList.Destination)
-                .ForMember(x => x.Claims, opts => opts.MapFrom(src => src.ScopeClaims.Select(x => x)))
-                .ForMember(x => x.ScopeSecrets, opts => opts.MapFrom(src => src.ScopeSecrets.Select(x => x)))
-                .ReverseMap()
-                .ForMember(x => x.ScopeClaims, opts => opts.MapFrom(src => src.Claims.Select(x => x)))
-                .ForMember(x => x.ScopeSecrets, opts => opts.MapFrom(src => src.ScopeSecrets.Select(x => x)));
-            Mapper.CreateMap<ScopeClaim, Core.Models.ScopeClaim>(MemberList.Destination)
-                .ReverseMap();
-            Mapper.CreateMap<ScopeSecret, Secret>(MemberList.Destination)
-                .ForMember(dest => dest.Type, opt => opt.Condition(srs => !srs.IsSourceValueNull))
-                .ReverseMap();
+            EntitiesMap.Mapper = new MapperConfiguration((config) =>
+            {
+                //scope
+                config.CreateMap<ScopeDocument, Scope>(MemberList.Destination)
+                    .ForMember(x => x.Claims, opts => opts.MapFrom(src => src.ScopeClaims.Select(x => x)))
+                    .ForMember(x => x.ScopeSecrets, opts => opts.MapFrom(src => src.ScopeSecrets.Select(x => x)))
+                    .ReverseMap()
+                    .ForMember(x => x.ScopeClaims, opts => opts.MapFrom(src => src.Claims.Select(x => x)))
+                    .ForMember(x => x.ScopeSecrets, opts => opts.MapFrom(src => src.ScopeSecrets.Select(x => x)));
+                config.CreateMap<ScopeClaim, Core.Models.ScopeClaim>(MemberList.Destination)
+                    .ReverseMap();
+                config.CreateMap<ScopeSecret, Secret>(MemberList.Destination)
+                    .ForMember(dest => dest.Type, opt => opt.Condition(srs => srs.Value != null))
+                    .ReverseMap();
 
-            //client
-            Mapper.CreateMap<ClientSecret, Secret>(MemberList.Destination)
-                .ForMember(dest => dest.Type, opt => opt.Condition(srs => !srs.IsSourceValueNull))
-                .ReverseMap();
-            Mapper.CreateMap<ClaimLite, Claim>(MemberList.Destination)
-                .ConstructUsing(c => c.ToClaim())
-                .ReverseMap()
-                .ConstructUsing(c => new ClaimLite(c));
-            Mapper.CreateMap<ClientDocument, Client>(MemberList.Destination)
-                .ForMember(x => x.Claims, opt => opt.MapFrom(src => src.Claims.Select(x => x.ToClaim())))
-                .ReverseMap();
+                //client
+                config.CreateMap<ClientSecret, Secret>(MemberList.Destination)
+                    .ForMember(dest => dest.Type, opt => opt.Condition(srs => srs.Value != null))
+                    .ReverseMap();
+                config.CreateMap<ClaimLite, Claim>(MemberList.Destination)
+                    .ConstructUsing(c => c.ToClaim())
+                    .ReverseMap()
+                    .ConstructUsing(c => new ClaimLite(c));
+                config.CreateMap<ClientDocument, Client>(MemberList.Destination)
+                    .ForMember(x => x.Claims, opt => opt.MapFrom(src => src.Claims.Select(x => x.ToClaim())))
+                    .ReverseMap();
 
-            //consent
-            Mapper.CreateMap<ConsentDocument, Consent>(MemberList.Destination)
-                .ForMember(x => x.Scopes, opt => opt.MapFrom(src => src.Scopes))
-                .ReverseMap();
+                //consent
+                config.CreateMap<ConsentDocument, Consent>(MemberList.Destination)
+                    .ForMember(x => x.Scopes, opt => opt.MapFrom(src => src.Scopes))
+                    .ReverseMap();
+            }).CreateMapper();
         }
 
         public static Scope ToModel(this ScopeDocument s)
